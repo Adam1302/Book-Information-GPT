@@ -17,7 +17,9 @@ os.environ['OPENAI_API_KEY'] = apikey
 ## TO BE MORE SPECIFIC, WE CAN HAVE MULTIPLE INPUT BOXES ##
 # ex. author, 
 
-# AMAZON/KINDLE links
+# "Find books/movies/shows about"
+
+# AMAZON/KINDLE links (NVM: this is pretty expensive since you'll need an API like Rainforest)
 
 def getLLM():
     llm = OpenAI(temperature=0)
@@ -39,48 +41,110 @@ book_template = """
     YOUR RESPONSE:
 """
 
-book_introduction_template = """
-    Introduce {book_title} in one paragraph
+movie_template = """
+    You will receive information about a movie.
+    Your goal is to:
+    - Find the movie
+    - Find the director
+    - Find the writer
+    - Find the year in which it was released
+    - Find the actors/actresses who starred in the movie
+
+    Here is an example:
+    Q:
+    Taxi Driver
+    A:
+    Taxi Driver (1976)\n
+    Directed by Martin Scorcese\n
+    Written by Paul Schrader\n
+    Starring Robert De Niro, Jodie Foster, Harvey Keitel, Cybill Shepherd
+
+
+    MOVIE: {movie_name}
+
+    YOUR RESPONSE:
+"""
+
+work_rating_template = """
+    What is the iMDB rating of {work_title}? Please provide only the rating in the format: 'rating/10'. If the rating does not exist or cannot be found, answer with 'N/A'
+"""
+
+work_introduction_template = """
+    Introduce {work_title} in one paragraph
 """
 
 book_info_prompt = PromptTemplate(
     input_variables=["book_name"],
     template=book_template,
 )
-
-book_introduction_prompt = PromptTemplate(
-    input_variables=["book_title"],
-    template=book_introduction_template,
+movie_info_prompt = PromptTemplate(
+    input_variables=["movie_name"],
+    template=movie_template,
+)
+work_rating_prompt = PromptTemplate(
+    input_variables=["work_title"],
+    template=work_rating_template,
+)
+work_introduction_prompt = PromptTemplate(
+    input_variables=["work_title"],
+    template=work_introduction_template,
 )
 
 llm = getLLM()
 book_info_chain = LLMChain(
     llm=llm, prompt=book_info_prompt, verbose=True, output_key='book_title',
 )
-book_introduction_chain = LLMChain(
-    llm=llm, prompt=book_introduction_prompt, verbose=True, output_key='book_intro',
+movie_info_chain = LLMChain(
+    llm=llm, prompt=movie_info_prompt, verbose=True, output_key='movie_title',
+)
+work_rating_chain = LLMChain(
+    llm=llm, prompt=work_rating_prompt, verbose=True, output_key='work_rating',
+)
+work_introduction_chain = LLMChain(
+    llm=llm, prompt=work_introduction_prompt, verbose=True, output_key='work_intro',
 )
 
-sl.set_page_config(page_title="Art_Finder", page_icon=":book:")
-sl.header("Search for a book:")
-
-def get_book():
+def get_work():
     input_book = sl.text_area(
-        label="Enter a work you are interested in:",
-        placeholder="Book name here",
-        key="book_name_input"
+        label="Enter the name or provide a description of the work you are interested in:",
+        placeholder="Work name here",
+        key="work_name_input"
     )
     return input_book
 
-book_name_input = get_book()
+sl.set_page_config(page_title="Art_Finder", page_icon=":book:")
 
-if book_name_input:
-    book_info_output = book_info_chain.run(book_name_input)
-    book_intro_output = book_introduction_chain.run(book_info_output)
+work_type = sl.selectbox(
+        'What type of work are you looking for?',
+        ('Book', 'Movie', 'TV Show', 'Documentary'))
 
-    sl.markdown("### Book Name:")
-    sl.write(book_info_output)
 
-    sl.markdown("### About the Book:")
-    sl.write(book_intro_output)
+work_name_input = get_work()
+
+if work_name_input:
+    if (work_type == "Book"):
+        book_info_output = book_info_chain.run(work_name_input)
+        book_intro_output = work_introduction_chain.run(book_info_output)
+
+        sl.markdown("### Book Name:")
+        sl.write(book_info_output)
+
+        sl.markdown("### About the Book:")
+        sl.write(book_intro_output)
+
+    elif (work_type == "Movie"):
+        movie_info_output = movie_info_chain.run(work_name_input)
+        movie_title = movie_info_output[0:movie_info_output.index("Directed by")]
+        movie_rating_output = work_rating_chain.run(movie_title)
+        movie_intro_output = work_introduction_chain.run(movie_title)
+
+        sl.markdown("### Movie Name:")
+        sl.write(movie_info_output)
+
+        sl.markdown("### Movie iMDB Rating:")
+        sl.write(movie_rating_output)
+
+
+        sl.markdown("### About the Movie:")
+        sl.write(movie_intro_output)
 
