@@ -65,6 +65,55 @@ movie_template = """
     YOUR RESPONSE:
 """
 
+tv_show_template = """
+    You will receive information about a television show.
+    Your goal is to:
+    - Find the show
+    - Find the creator of the show
+    - Find the actors/actresses who starred in the show
+    - Find the year in which it began
+    - Find the year in which it ended. If it hasn't ended, display 'present'.
+    - Find the number of seasons
+
+    Here are two examples:
+    Q:
+    The Sopranos
+    A:
+    Sopranos (1999-2007) [6 seasons]\n
+    Created by David Chase\n
+    Starring James Gandolfini, Michael Imperioli, Edie Falco, Lorraine Bracco\n
+
+    Q:
+    8 Out of 10 Cats (2005-present) [21 seasons]\n
+    Created by Channel 4\n
+    Starring Jimmy Carr, Sean Lock, Jon Richardson\n
+
+
+    SHOW: {show_name}
+
+    YOUR RESPONSE:
+"""
+
+documentary_template = """
+    You will receive information about a documentary.
+    Your goal is to:
+    - Find the documentary
+    - Find the Director
+    - Find the year in which it was released
+
+    Here is an example:
+    Q:
+    Grizzly Man
+    A:
+    Grizzly Man (2005)\n
+    Directed by Werner Herzog
+
+
+    DOCUMENTARY: {documentary_name}
+
+    YOUR RESPONSE:
+"""
+
 work_rating_template = """
     What is the iMDB rating of {work_title}? Please provide only the rating in the format: 'rating/10'. If the rating does not exist or cannot be found, answer with 'N/A'
 """
@@ -81,6 +130,14 @@ movie_info_prompt = PromptTemplate(
     input_variables=["movie_name"],
     template=movie_template,
 )
+tv_show_info_prompt = PromptTemplate(
+    input_variables=["show_name"],
+    template=tv_show_template,
+)
+documentary_info_prompt = PromptTemplate(
+    input_variables=["documentary_name"],
+    template=documentary_template,
+)
 work_rating_prompt = PromptTemplate(
     input_variables=["work_title"],
     template=work_rating_template,
@@ -96,6 +153,12 @@ book_info_chain = LLMChain(
 )
 movie_info_chain = LLMChain(
     llm=llm, prompt=movie_info_prompt, verbose=True, output_key='movie_title',
+)
+tv_show_info_chain = LLMChain(
+    llm=llm, prompt=tv_show_info_prompt, verbose=True, output_key='tv_show_title',
+)
+documentary_info_chain = LLMChain(
+    llm=llm, prompt=documentary_info_prompt, verbose=True, output_key='documentary_title',
 )
 work_rating_chain = LLMChain(
     llm=llm, prompt=work_rating_prompt, verbose=True, output_key='work_rating',
@@ -126,10 +189,10 @@ if work_name_input:
         book_info_output = book_info_chain.run(work_name_input)
         book_intro_output = work_introduction_chain.run(book_info_output)
 
-        sl.markdown("### Book Name:")
+        sl.markdown("### Book:")
         sl.write(book_info_output)
 
-        sl.markdown("### About the Book:")
+        sl.markdown("### About:")
         sl.write(book_intro_output)
 
     elif (work_type == "Movie"):
@@ -138,13 +201,43 @@ if work_name_input:
         movie_rating_output = work_rating_chain.run(movie_title)
         movie_intro_output = work_introduction_chain.run(movie_title)
 
-        sl.markdown("### Movie Name:")
+        sl.markdown("### Movie:")
         sl.write(movie_info_output)
 
-        sl.markdown("### Movie iMDB Rating:")
+        sl.markdown("### iMDB Rating:")
         sl.write(movie_rating_output)
 
 
-        sl.markdown("### About the Movie:")
+        sl.markdown("### About:")
         sl.write(movie_intro_output)
+
+    elif (work_type == "TV Show"):
+        tv_show_info_output = tv_show_info_chain.run(work_name_input)
+        tv_show_title = tv_show_info_output[0:tv_show_info_output.index('[')]
+        tv_show_rating_output = work_rating_chain.run(tv_show_title)
+        tv_show_intro_output = work_introduction_chain.run(tv_show_title)
+
+        sl.markdown("### TV Show:")
+        sl.write(tv_show_info_output)
+
+        sl.markdown("### iMDB Rating:")
+        sl.write(tv_show_rating_output)
+
+        sl.markdown("### About")
+        sl.write(tv_show_intro_output)
+
+    elif (work_type == "Documentary"):
+        documentary_info_output = documentary_info_chain.run(work_name_input)
+        documentary_title = documentary_info_output[0:(documentary_info_output.index(')') + 1)]
+        documentary_rating_output = work_rating_chain.run(documentary_title)
+        documentary_intro_output = work_introduction_chain.run(documentary_title)
+
+        sl.markdown("### Documentary:")
+        sl.write(documentary_info_output)
+
+        sl.markdown("### iMDB Rating:")
+        sl.write(documentary_rating_output)
+
+        sl.markdown("### About:")
+        sl.write(documentary_intro_output)
 
