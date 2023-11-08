@@ -19,6 +19,8 @@ os.environ['OPENAI_API_KEY'] = apikey
 
 # "Find books/movies/shows about"
 
+# Poem, Painting, Sculpture, Theatre
+
 # AMAZON/KINDLE links (NVM: this is pretty expensive since you'll need an API like Rainforest)
 
 def getLLM():
@@ -37,6 +39,22 @@ book_template = """
     A: Of Mice And Men (1937) by John Steinbeck
 
     BOOK: {book_name}
+
+    YOUR RESPONSE:
+"""
+
+poem_template = """
+    You will receive information about a poem.
+    Your goal is to:
+    - Find the poem
+    - Find the poet
+    - Find the year in which it was written
+
+    Here is an example:
+    Q: O Captain! My Captain!
+    A: O' Captain, My Captain (1865) by Walt Whitman
+
+    POEM: {poem_name}
 
     YOUR RESPONSE:
 """
@@ -138,6 +156,10 @@ documentary_info_prompt = PromptTemplate(
     input_variables=["documentary_name"],
     template=documentary_template,
 )
+poem_info_prompt = PromptTemplate(
+    input_variables=["poem_name"],
+    template=poem_template,
+)
 work_rating_prompt = PromptTemplate(
     input_variables=["work_title"],
     template=work_rating_template,
@@ -160,6 +182,9 @@ tv_show_info_chain = LLMChain(
 documentary_info_chain = LLMChain(
     llm=llm, prompt=documentary_info_prompt, verbose=True, output_key='documentary_title',
 )
+poem_info_chain = LLMChain(
+    llm=llm, prompt=poem_info_prompt, verbose=True, output_key='poem_title',
+)
 work_rating_chain = LLMChain(
     llm=llm, prompt=work_rating_prompt, verbose=True, output_key='work_rating',
 )
@@ -179,8 +204,7 @@ sl.set_page_config(page_title="Art_Finder", page_icon=":book:")
 
 work_type = sl.selectbox(
         'What type of work are you looking for?',
-        ('Book', 'Movie', 'TV Show', 'Documentary'))
-
+        ('Book', 'Movie', 'TV Show', 'Documentary', 'Poem'))
 
 work_name_input = get_work()
 
@@ -240,4 +264,16 @@ if work_name_input:
 
         sl.markdown("### About:")
         sl.write(documentary_intro_output)
+
+    elif (work_type == "Poem"):
+        poem_info_output = poem_info_chain.run(work_name_input)
+        poem_title = poem_info_output
+        poem_rating_output = work_rating_chain.run(poem_title)
+        poem_intro_output = work_introduction_chain.run(poem_title)
+
+        sl.markdown("### Poem:")
+        sl.write(poem_info_output)
+
+        sl.markdown("### About:")
+        sl.write(poem_intro_output)
 
