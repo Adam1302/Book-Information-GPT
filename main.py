@@ -8,7 +8,7 @@ from langchain.memory import ConversationBufferMemory
 
 os.environ['OPENAI_API_KEY'] = apikey
 
-#IDEAS
+# ART MEDIA LITERATURE: IDEAS
 ## AS PER: https://www.youtube.com/watch?v=U_eV8wfMkXU
 #   we will have a nice multi-columned explanation of what this site does
 
@@ -19,7 +19,7 @@ os.environ['OPENAI_API_KEY'] = apikey
 
 # "Find books/movies/shows about"
 
-# Poem, Painting, Sculpture, Theatre
+# Theatre
 
 # AMAZON/KINDLE links (NVM: this is pretty expensive since you'll need an API like Rainforest)
 
@@ -132,6 +132,58 @@ documentary_template = """
     YOUR RESPONSE:
 """
 
+painting_template = """
+    You will receive information about a painting.
+    Your goal is to:
+    - Find the painting
+    - Find the artist
+    - Find the year in which it was completed
+
+    Here is an example:
+    Q: Mona Lisa
+    A: Mona Lisa (1519) by Leonardo da Vinci
+
+    Painting: {painting_name}
+
+    YOUR RESPONSE:
+"""
+
+sculpture_template = """
+    You will receive information about a sculpture.
+    Your goal is to:
+    - Find the sculpture
+    - Find the sculptor
+    - Find the year in which it was completed
+
+    Here is an example:
+    Q: The Thinker
+    A: The Thinker (1904) by Auguste Rodin
+
+    Sculpture: {sculpture_name}
+
+    YOUR RESPONSE:
+"""
+
+theatre_template = """
+    You will receive information about a a play or a musical.
+    Your goal is to:
+    - Find the play/musical name
+    - Find the writer(s)
+    - Find the year in which it first premiered
+
+    Here are three examples:
+    Q: Death of a Salesman
+    A: Death of a Salesman (1949) by Arthur Miller
+    Q: A Streetcar Named Desire
+    A: A Streetcar Named Desire (1947) by Tennessee Williams
+    Q: The Importance of Being Earnest
+    A: The Importance of Being Earnest (1895) by Oscar Wilde
+
+    Play/Musical: {theatre_name}
+
+    YOUR RESPONSE:
+"""
+
 work_rating_template = """
     What is the iMDB rating of {work_title}? Please provide only the rating in the format: 'rating/10'. If the rating does not exist or cannot be found, answer with 'N/A'
 """
@@ -160,6 +212,18 @@ poem_info_prompt = PromptTemplate(
     input_variables=["poem_name"],
     template=poem_template,
 )
+painting_info_prompt = PromptTemplate(
+    input_variables=["painting_name"],
+    template=painting_template,
+)
+sculpture_info_prompt = PromptTemplate(
+    input_variables=["sculpture_name"],
+    template=sculpture_template,
+)
+theatre_info_prompt = PromptTemplate(
+    input_variables=["theatre_name"],
+    template=theatre_template,
+)
 work_rating_prompt = PromptTemplate(
     input_variables=["work_title"],
     template=work_rating_template,
@@ -185,6 +249,15 @@ documentary_info_chain = LLMChain(
 poem_info_chain = LLMChain(
     llm=llm, prompt=poem_info_prompt, verbose=True, output_key='poem_title',
 )
+painting_info_chain = LLMChain(
+    llm=llm, prompt=painting_info_prompt, verbose=True, output_key='painting_title',
+)
+sculpture_info_chain = LLMChain(
+    llm=llm, prompt=sculpture_info_prompt, verbose=True, output_key='sculpture_title',
+)
+theatre_info_chain = LLMChain(
+    llm=llm, prompt=theatre_info_prompt, verbose=True, output_key='theatre_title',
+)
 work_rating_chain = LLMChain(
     llm=llm, prompt=work_rating_prompt, verbose=True, output_key='work_rating',
 )
@@ -204,7 +277,8 @@ sl.set_page_config(page_title="Art_Finder", page_icon=":book:")
 
 work_type = sl.selectbox(
         'What type of work are you looking for?',
-        ('Book', 'Movie', 'TV Show', 'Documentary', 'Poem'))
+        ('Book', 'Movie', 'TV Show', 'Documentary',
+        'Poem', 'Painting', 'Sculpture', 'Theatre (Plays and Musicals)'))
 
 work_name_input = get_work()
 
@@ -268,7 +342,6 @@ if work_name_input:
     elif (work_type == "Poem"):
         poem_info_output = poem_info_chain.run(work_name_input)
         poem_title = poem_info_output
-        poem_rating_output = work_rating_chain.run(poem_title)
         poem_intro_output = work_introduction_chain.run(poem_title)
 
         sl.markdown("### Poem:")
@@ -276,4 +349,37 @@ if work_name_input:
 
         sl.markdown("### About:")
         sl.write(poem_intro_output)
+
+    elif (work_type == "Painting"):
+        painting_info_output = painting_info_chain.run(work_name_input)
+        painting_title = painting_info_output
+        painting_intro_output = work_introduction_chain.run(painting_title)
+
+        sl.markdown("### Painting:")
+        sl.write(painting_info_output)
+
+        sl.markdown("### About:")
+        sl.write(painting_intro_output)
+
+    elif (work_type == "Sculpture"):
+        sculpture_info_output = sculpture_info_chain.run(work_name_input)
+        sculpture_title = sculpture_info_output
+        sculpture_intro_output = work_introduction_chain.run(sculpture_title)
+
+        sl.markdown("### Sculpture:")
+        sl.write(sculpture_info_output)
+
+        sl.markdown("### About:")
+        sl.write(sculpture_intro_output)
+
+    elif (work_type == "Theatre (Plays and Musicals)"):
+        theatre_info_output = theatre_info_chain.run(work_name_input)
+        theatre_title = theatre_info_output
+        theatre_intro_output = work_introduction_chain.run(theatre_title)
+
+        sl.markdown("### Theatre:")
+        sl.write(theatre_info_output)
+
+        sl.markdown("### About:")
+        sl.write(theatre_intro_output)
 
