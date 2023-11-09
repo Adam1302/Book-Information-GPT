@@ -38,7 +38,7 @@ book_template = """
     Q: Of Mice And Men
     A: Of Mice And Men (1937) by John Steinbeck
 
-    BOOK: {book_name}
+    BOOK: {work_name}
 
     YOUR RESPONSE:
 """
@@ -54,7 +54,7 @@ poem_template = """
     Q: O Captain! My Captain!
     A: O' Captain, My Captain (1865) by Walt Whitman
 
-    POEM: {poem_name}
+    POEM: {work_name}
 
     YOUR RESPONSE:
 """
@@ -78,7 +78,7 @@ movie_template = """
     Starring Robert De Niro, Jodie Foster, Harvey Keitel, Cybill Shepherd
 
 
-    MOVIE: {movie_name}
+    MOVIE: {work_name}
 
     YOUR RESPONSE:
 """
@@ -107,7 +107,7 @@ tv_show_template = """
     Starring Jimmy Carr, Sean Lock, Jon Richardson\n
 
 
-    SHOW: {show_name}
+    SHOW: {work_name}
 
     YOUR RESPONSE:
 """
@@ -127,7 +127,7 @@ documentary_template = """
     Directed by Werner Herzog
 
 
-    DOCUMENTARY: {documentary_name}
+    DOCUMENTARY: {work_name}
 
     YOUR RESPONSE:
 """
@@ -143,7 +143,7 @@ painting_template = """
     Q: Mona Lisa
     A: Mona Lisa (1519) by Leonardo da Vinci
 
-    Painting: {painting_name}
+    Painting: {work_name}
 
     YOUR RESPONSE:
 """
@@ -159,7 +159,7 @@ sculpture_template = """
     Q: The Thinker
     A: The Thinker (1904) by Auguste Rodin
 
-    Sculpture: {sculpture_name}
+    Sculpture: {work_name}
 
     YOUR RESPONSE:
 """
@@ -179,7 +179,7 @@ theatre_template = """
     Q: The Importance of Being Earnest
     A: The Importance of Being Earnest (1895) by Oscar Wilde
 
-    Play/Musical: {theatre_name}
+    Play/Musical: {work_name}
 
     YOUR RESPONSE:
 """
@@ -192,38 +192,39 @@ work_introduction_template = """
     Introduce {work_title} in one paragraph
 """
 
-book_info_prompt = PromptTemplate(
-    input_variables=["book_name"],
-    template=book_template,
-)
-movie_info_prompt = PromptTemplate(
-    input_variables=["movie_name"],
-    template=movie_template,
-)
-tv_show_info_prompt = PromptTemplate(
-    input_variables=["show_name"],
-    template=tv_show_template,
-)
-documentary_info_prompt = PromptTemplate(
-    input_variables=["documentary_name"],
-    template=documentary_template,
-)
-poem_info_prompt = PromptTemplate(
-    input_variables=["poem_name"],
-    template=poem_template,
-)
-painting_info_prompt = PromptTemplate(
-    input_variables=["painting_name"],
-    template=painting_template,
-)
-sculpture_info_prompt = PromptTemplate(
-    input_variables=["sculpture_name"],
-    template=sculpture_template,
-)
-theatre_info_prompt = PromptTemplate(
-    input_variables=["theatre_name"],
-    template=theatre_template,
-)
+def getTemplate(artType):
+    if (artType == "Book"):
+        return book_template
+    elif (artType == "Poem"):
+        return poem_template
+    elif (artType == "Movie"):
+        return movie_template
+    elif (artType == "TV Show"):
+        return tv_show_template
+    elif (artType == "Documentary"):
+        return documentary_template
+    elif (artType == "Painting"):
+        return painting_template
+    elif (artType == "Sculpture"):
+        return sculpture_template
+    elif (artType == "Theatre"):
+        return theatre_template
+    
+def getWorkTitle(infoOutput, work_type):
+    if (work_type == "Book" or work_type == "Poem" or work_type == "Painting" or work_type == "Sculpture" or work_type == "Theatre (Plays and Musicals)"):
+        return infoOutput
+    elif work_type == "Movie":
+        return infoOutput[0:infoOutput.index("Directed by")]
+    elif work_type == "TV Show":
+        return infoOutput[0:infoOutput.index('[')]
+    elif work_type == "Documentary":
+        return infoOutput[0:(infoOutput.index(')') + 1)]
+
+def getWorkIdentifierPrompt(artType):
+    return PromptTemplate(
+        input_variables=["work_name"],
+        template=getTemplate(artType),
+    )
 work_rating_prompt = PromptTemplate(
     input_variables=["work_title"],
     template=work_rating_template,
@@ -234,30 +235,11 @@ work_introduction_prompt = PromptTemplate(
 )
 
 llm = getLLM()
-book_info_chain = LLMChain(
-    llm=llm, prompt=book_info_prompt, verbose=True, output_key='book_title',
-)
-movie_info_chain = LLMChain(
-    llm=llm, prompt=movie_info_prompt, verbose=True, output_key='movie_title',
-)
-tv_show_info_chain = LLMChain(
-    llm=llm, prompt=tv_show_info_prompt, verbose=True, output_key='tv_show_title',
-)
-documentary_info_chain = LLMChain(
-    llm=llm, prompt=documentary_info_prompt, verbose=True, output_key='documentary_title',
-)
-poem_info_chain = LLMChain(
-    llm=llm, prompt=poem_info_prompt, verbose=True, output_key='poem_title',
-)
-painting_info_chain = LLMChain(
-    llm=llm, prompt=painting_info_prompt, verbose=True, output_key='painting_title',
-)
-sculpture_info_chain = LLMChain(
-    llm=llm, prompt=sculpture_info_prompt, verbose=True, output_key='sculpture_title',
-)
-theatre_info_chain = LLMChain(
-    llm=llm, prompt=theatre_info_prompt, verbose=True, output_key='theatre_title',
-)
+def getWorkIdentifierChain(artType):
+    return LLMChain(
+        llm=llm, prompt=getWorkIdentifierPrompt(artType),
+        verbose=True, output_key='work_title',
+    )
 work_rating_chain = LLMChain(
     llm=llm, prompt=work_rating_prompt, verbose=True, output_key='work_rating',
 )
@@ -283,103 +265,17 @@ work_type = sl.selectbox(
 work_name_input = get_work()
 
 if work_name_input:
-    if (work_type == "Book"):
-        book_info_output = book_info_chain.run(work_name_input)
-        book_intro_output = work_introduction_chain.run(book_info_output)
+    work_info = getWorkIdentifierChain(work_type).run(work_name_input)
+    work_title = getWorkTitle(work_info, work_type)
+    work_intro = work_introduction_chain.run(work_title)
 
-        sl.markdown("### Book:")
-        sl.write(book_info_output)
+    sl.markdown(f"### {work_type}:")
+    sl.write(work_info)
 
-        sl.markdown("### About:")
-        sl.write(book_intro_output)
-
-    elif (work_type == "Movie"):
-        movie_info_output = movie_info_chain.run(work_name_input)
-        movie_title = movie_info_output[0:movie_info_output.index("Directed by")]
-        movie_rating_output = work_rating_chain.run(movie_title)
-        movie_intro_output = work_introduction_chain.run(movie_title)
-
-        sl.markdown("### Movie:")
-        sl.write(movie_info_output)
-
+    if (work_type == "Movie" or work_type == "TV Show" or work_type == "Documentary"):
         sl.markdown("### iMDB Rating:")
-        sl.write(movie_rating_output)
+        sl.write(work_rating_chain.run(work_title))
 
-
-        sl.markdown("### About:")
-        sl.write(movie_intro_output)
-
-    elif (work_type == "TV Show"):
-        tv_show_info_output = tv_show_info_chain.run(work_name_input)
-        tv_show_title = tv_show_info_output[0:tv_show_info_output.index('[')]
-        tv_show_rating_output = work_rating_chain.run(tv_show_title)
-        tv_show_intro_output = work_introduction_chain.run(tv_show_title)
-
-        sl.markdown("### TV Show:")
-        sl.write(tv_show_info_output)
-
-        sl.markdown("### iMDB Rating:")
-        sl.write(tv_show_rating_output)
-
-        sl.markdown("### About")
-        sl.write(tv_show_intro_output)
-
-    elif (work_type == "Documentary"):
-        documentary_info_output = documentary_info_chain.run(work_name_input)
-        documentary_title = documentary_info_output[0:(documentary_info_output.index(')') + 1)]
-        documentary_rating_output = work_rating_chain.run(documentary_title)
-        documentary_intro_output = work_introduction_chain.run(documentary_title)
-
-        sl.markdown("### Documentary:")
-        sl.write(documentary_info_output)
-
-        sl.markdown("### iMDB Rating:")
-        sl.write(documentary_rating_output)
-
-        sl.markdown("### About:")
-        sl.write(documentary_intro_output)
-
-    elif (work_type == "Poem"):
-        poem_info_output = poem_info_chain.run(work_name_input)
-        poem_title = poem_info_output
-        poem_intro_output = work_introduction_chain.run(poem_title)
-
-        sl.markdown("### Poem:")
-        sl.write(poem_info_output)
-
-        sl.markdown("### About:")
-        sl.write(poem_intro_output)
-
-    elif (work_type == "Painting"):
-        painting_info_output = painting_info_chain.run(work_name_input)
-        painting_title = painting_info_output
-        painting_intro_output = work_introduction_chain.run(painting_title)
-
-        sl.markdown("### Painting:")
-        sl.write(painting_info_output)
-
-        sl.markdown("### About:")
-        sl.write(painting_intro_output)
-
-    elif (work_type == "Sculpture"):
-        sculpture_info_output = sculpture_info_chain.run(work_name_input)
-        sculpture_title = sculpture_info_output
-        sculpture_intro_output = work_introduction_chain.run(sculpture_title)
-
-        sl.markdown("### Sculpture:")
-        sl.write(sculpture_info_output)
-
-        sl.markdown("### About:")
-        sl.write(sculpture_intro_output)
-
-    elif (work_type == "Theatre (Plays and Musicals)"):
-        theatre_info_output = theatre_info_chain.run(work_name_input)
-        theatre_title = theatre_info_output
-        theatre_intro_output = work_introduction_chain.run(theatre_title)
-
-        sl.markdown("### Theatre:")
-        sl.write(theatre_info_output)
-
-        sl.markdown("### About:")
-        sl.write(theatre_intro_output)
-
+    sl.markdown("### About:")
+    sl.write(work_intro)
+    
