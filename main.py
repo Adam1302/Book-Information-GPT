@@ -12,14 +12,12 @@ os.environ['OPENAI_API_KEY'] = apikey
 ## AS PER: https://www.youtube.com/watch?v=U_eV8wfMkXU
 #   we will have a nice multi-columned explanation of what this site does
 
-# Later, we could have dropdowns for books, movies (platforms available on), shows (platforms available on), etc.
-
 ## TO BE MORE SPECIFIC, WE CAN HAVE MULTIPLE INPUT BOXES ##
 # ex. author, 
 
 # "Find books/movies/shows about"
 
-# Theatre
+# Two columns: one to find movie ideas, other to identify them
 
 # AMAZON/KINDLE links (NVM: this is pretty expensive since you'll need an API like Rainforest)
 
@@ -207,11 +205,11 @@ def getTemplate(artType):
         return painting_template
     elif (artType == "Sculpture"):
         return sculpture_template
-    elif (artType == "Theatre"):
+    elif (artType == "Play/Musical"):
         return theatre_template
     
 def getWorkTitle(infoOutput, work_type):
-    if (work_type == "Book" or work_type == "Poem" or work_type == "Painting" or work_type == "Sculpture" or work_type == "Theatre (Plays and Musicals)"):
+    if (work_type == "Book" or work_type == "Poem" or work_type == "Painting" or work_type == "Sculpture" or work_type == "Play/Musical"):
         return infoOutput
     elif work_type == "Movie":
         return infoOutput[0:infoOutput.index("Directed by")]
@@ -247,9 +245,9 @@ work_introduction_chain = LLMChain(
     llm=llm, prompt=work_introduction_prompt, verbose=True, output_key='work_intro',
 )
 
-def get_work():
+def get_work(work_type):
     input_book = sl.text_area(
-        label="Enter the name or provide a description of the work you are interested in:",
+        label=f"Enter the name or provide a description of the {work_type} you are interested in:",
         placeholder="Work name here",
         key="work_name_input"
     )
@@ -260,9 +258,9 @@ sl.set_page_config(page_title="Art_Finder", page_icon=":book:")
 work_type = sl.selectbox(
         'What type of work are you looking for?',
         ('Book', 'Movie', 'TV Show', 'Documentary',
-        'Poem', 'Painting', 'Sculpture', 'Theatre (Plays and Musicals)'))
+        'Poem', 'Painting', 'Sculpture', 'Play/Musical'))
 
-work_name_input = get_work()
+work_name_input = get_work(work_type)
 
 if work_name_input:
     work_info = getWorkIdentifierChain(work_type).run(work_name_input)
