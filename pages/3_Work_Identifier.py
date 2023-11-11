@@ -5,49 +5,7 @@ from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain, SequentialChain
 from langchain.llms import OpenAI
 from langchain.memory import ConversationBufferMemory
-
-os.environ['OPENAI_API_KEY'] = apikey
-
-# ART MEDIA LITERATURE: IDEAS
-## AS PER: https://www.youtube.com/watch?v=U_eV8wfMkXU
-#   we will have a nice multi-columned explanation of what this site does
-
-# Creating Pages
-### Create a main page with a nice picture or two
-### Create a nice About page with expandable drop-downs for each
-### Create a page for each service
-### Create a contact page and email
-
-# Use st.progress() to show progress
-### https://docs.streamlit.io/library/get-started/main-concepts#show-progress
-
-# Once all features are in, fix the layout: https://docs.streamlit.io/library/get-started/main-concepts#layout
-### search up how to make streamlit look nice
-### Use header, subheader, markdown, write, etc.
-
-# For long-running functions: https://docs.streamlit.io/library/get-started/main-concepts#caching
-### this is a MUST-do for all functions that have similar runs
-
-# Re-organize everything into different files, proper style/organization
-
-# Deploy:
-### https://docs.streamlit.io/library/get-started/create-an-app#share-your-app
-
-# Advertise
-### Create reddit account and share
-
-## TO BE MORE SPECIFIC, WE CAN HAVE MULTIPLE INPUT BOXES ##
-# ex. author, 
-
-# "Topic prompts: in the style of '...'"
-### creativity widget that controls temperature
-### 
-
-# AMAZON/KINDLE links (NVM: this is pretty expensive since you'll need an API like Rainforest)
-
-def getLLM():
-    llm = OpenAI(temperature=0)
-    return llm
+from utils.llm import getLLM
 
 book_template = """
     You will receive information about a book.
@@ -214,32 +172,6 @@ work_introduction_template = """
     Introduce {work_title} in one paragraph
 """
 
-work_suggestion_template = """
-    Below you will recieve a topic or description. Your goal is to provide between 3 and 5 suggestions of a {work_type} related to the topic or description. For each {work_type}, provide a 1-2 sentence introduction without revealing details of the plot.
-
-    Here is an example of fiction books about the ultimate futility of life:
-    1. "The Stranger" by Albert Camus:
-    Camus' novel follows the detached Meursault as he grapples with the absurdity of existence, portraying the ultimate futility of conventional societal expectations.
-    2. "Nausea" by Jean-Paul Sartre:
-    In this existentialist classic, Roquentin's contemplation of existence in a small town becomes a profound exploration of the inherent nausea and meaninglessness of life.
-    3. "The Road" by Cormac McCarthy:
-    McCarthy's post-apocalyptic tale follows a father and son as they traverse a desolate world, reflecting on the futility of survival and the relentless march toward an uncertain future.
-
-    Here is another example of paintings about the illusion of love:
-    1: "The Lovers II" by René Magritte:
-    Magritte's surrealist painting challenges the conventional notion of love by depicting two lovers with their heads veiled, questioning the authenticity and reality of the emotions involved.
-    2: "Automat" by Edward Hopper:
-    Hopper's iconic painting captures a woman alone in a restaurant, suggesting the isolation that can accompany the illusion of love and the complexities of human connection.
-    3: "Love" by Robert Indiana:
-    Indiana's famous "LOVE" sculpture, with its bold letters arranged in a square, explores the commodification and pop culture aspects of love, challenging the depth and sincerity of romantic illusions.
-    4: "The Kiss" by Gustav Klimt:
-    Klimt's masterpiece, featuring a couple locked in an intimate embrace surrounded by ornate patterns, explores the intertwining of love and the decorative, raising questions about the substance behind the illusion of passion.
-    5: "The Birth of Venus" by Sandro Botticelli:
-    Botticelli's iconic painting of Venus emerging from the sea symbolizes the idealized and mythological aspects of love, inviting contemplation on the illusionary nature of beauty and desire.
-
-    TOPIC: {topic}
-"""
-
 def getTemplate(artType):
     if (artType == "Book"):
         return book_template
@@ -257,7 +189,7 @@ def getTemplate(artType):
         return sculpture_template
     elif (artType == "Play/Musical"):
         return theatre_template
-    
+
 def getWorkTitle(infoOutput, work_type):
     if (work_type == "Book" or work_type == "Poem" or work_type == "Painting" or work_type == "Sculpture" or work_type == "Play/Musical"):
         return infoOutput
@@ -281,12 +213,9 @@ work_introduction_prompt = PromptTemplate(
     input_variables=["work_title"],
     template=work_introduction_template,
 )
-work_suggestion_prompt= PromptTemplate(
-    input_variables=["work_type", "topic"],
-    template=work_suggestion_template,
-)
 
-llm = getLLM()
+llm = getLLM(0)
+
 def getWorkIdentifierChain(artType):
     return LLMChain(
         llm=llm, prompt=getWorkIdentifierPrompt(artType),
@@ -298,9 +227,6 @@ work_rating_chain = LLMChain(
 work_introduction_chain = LLMChain(
     llm=llm, prompt=work_introduction_prompt, verbose=True, output_key='work_intro',
 )
-work_suggestion_chain = LLMChain(
-    llm=llm, prompt=work_suggestion_prompt, verbose=True, output_key='work_suggestions',
-)
 
 def get_work(work_type):
     work_they_want = sl.text_area(
@@ -310,59 +236,27 @@ def get_work(work_type):
     )
     return work_they_want
 
-def get_work_desire():
-    topic_they_want = sl.text_area(
-        label=f"Enter or describe a topic or idea that you are interested in:",
-        placeholder="Enter here",
-        key="work_description_input"
-    )
-    return topic_they_want
+sl.set_page_config(page_title="Work_Identifier", page_icon=":book:")
+sl.header("Work Identifier")
 
-## STREAMLIT PAGE
-sl.set_page_config(page_title="Art_Finder", page_icon=":book:")
+work_type = sl.selectbox(
+        'What type of work are you looking for?',
+        ('Book', 'Movie', 'TV Show', 'Documentary',
+        'Poem', 'Painting', 'Sculpture', 'Play/Musical'))
 
-sl.markdown("Here's what we offer:")
-sl.write("Work Suggestor: Receive a list of suggested works to look at based on what you're looking for")
-sl.write("Work Identifier: Enter the name or a description of a specific work and recieve information about it")
+work_name_input = get_work(work_type)
 
-service_type = sl.selectbox(
-    'Which service would you like?',
-    ('Work Suggestor', 'Work Identifier',)
-)
+if work_name_input:
+    work_info = getWorkIdentifierChain(work_type).run(work_name_input)
+    work_title = getWorkTitle(work_info, work_type).strip()
+    work_intro = work_introduction_chain.run(work_title)
 
-if service_type == "Work Identifier":
-    work_type = sl.selectbox(
-            'What type of work are you looking for?',
-            ('Book', 'Movie', 'TV Show', 'Documentary',
-            'Poem', 'Painting', 'Sculpture', 'Play/Musical'))
+    sl.markdown(f"### {work_type}:")
+    sl.write(work_info)
 
-    work_name_input = get_work(work_type)
+    if (work_type == "Movie" or work_type == "TV Show" or work_type == "Documentary"):
+        sl.markdown("### iMDB Rating:")
+        sl.write(work_rating_chain.run(work_title))
 
-    if work_name_input:
-        work_info = getWorkIdentifierChain(work_type).run(work_name_input)
-        work_title = getWorkTitle(work_info, work_type).strip()
-        work_intro = work_introduction_chain.run(work_title)
-
-        sl.markdown(f"### {work_type}:")
-        sl.write(work_info)
-
-        if (work_type == "Movie" or work_type == "TV Show" or work_type == "Documentary"):
-            sl.markdown("### iMDB Rating:")
-            sl.write(work_rating_chain.run(work_title))
-
-        sl.markdown("### About:")
-        sl.write(work_intro)
-elif service_type == "Work Suggestor":
-    work_type = sl.selectbox(
-            'What type of work would you like suggested?',
-            ('Novel/Novella', 'Short Story', 'Book', 'Movie', 'TV Show', 'Documentary',
-            'Poem', 'Painting', 'Sculpture', 'Play/Musical'))
-    
-    topic_input = get_work_desire()
-
-    if topic_input:
-        suggestions = work_suggestion_chain.run({'topic': topic_input, 'work_type': work_type})
-
-        sl.markdown(f"### Suggestions")
-        sl.write(suggestions)
-    
+    sl.markdown("### About:")
+    sl.write(work_intro)
