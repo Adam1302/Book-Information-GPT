@@ -17,4 +17,4 @@ with textCol:
     sl.markdown("Please offer us some feedback in the 'Give Us Feedback' tab. Please note that this site is not for-profit and is personally funded by its creator; as a result, due to time or resource limitations, not all suggestions can be honoured.")
 
 with imageCol:
-    sl.image('pictures/growing_tree.jpg')
+    sl.image('pictures/other/growing_tree.jpg')
