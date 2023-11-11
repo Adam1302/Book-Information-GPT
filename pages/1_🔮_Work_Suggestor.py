@@ -3,8 +3,6 @@ import streamlit as sl
 from apikey import apikey # stored locally, not on Git
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain, SequentialChain
-from langchain.llms import OpenAI
-from langchain.memory import ConversationBufferMemory
 from utils.llm import getLLM
 
 llm = getLLM(0)
@@ -39,8 +37,8 @@ def getWorkSuggestionPrompt():
         template=work_suggestion_template,
     )
 
-#def getWorkSuggestionChain():
-wo = LLMChain(
+def getWorkSuggestionChain():
+    return LLMChain(
         llm=llm, prompt=getWorkSuggestionPrompt(), verbose=True, output_key='work_suggestions',
     )
 
@@ -63,7 +61,7 @@ work_type = sl.selectbox(
 topic_input = get_work_desire()
 
 if topic_input:
-    suggestions = wo.run({'topic': topic_input, 'work_type': work_type})
+    suggestions = getWorkSuggestionChain().run({'topic': topic_input, 'work_type': work_type})
 
     sl.markdown(f"### Suggestions")
     sl.write(suggestions)

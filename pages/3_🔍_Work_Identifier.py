@@ -3,8 +3,6 @@ import streamlit as sl
 from apikey import apikey # stored locally, not on Git
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain, SequentialChain
-from langchain.llms import OpenAI
-from langchain.memory import ConversationBufferMemory
 from utils.llm import getLLM
 
 book_template = """
