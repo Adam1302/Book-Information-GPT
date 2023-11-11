@@ -15,7 +15,8 @@ os.environ['OPENAI_API_KEY'] = apikey
 ### Create a nice About page with expandable drop-downs for each
 ### Create a page for each service
 ### Create a contact page and email
-### Add emojis for each page (1_[emoji]_pagename.py)
+
+### Better Layout -- resizable?
 
 # Use st.progress() to show progress
 ### https://docs.streamlit.io/library/get-started/main-concepts#show-progress
