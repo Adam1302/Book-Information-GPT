@@ -212,8 +212,11 @@ work_introduction_prompt = PromptTemplate(
     template=work_introduction_template,
 )
 
+sl.set_page_config(page_title="Work_Identifier", page_icon=":book:")
+
 llm = getLLM(0)
 
+@sl.cache_data
 def getWorkIdentifierChain(artType):
     return LLMChain(
         llm=llm, prompt=getWorkIdentifierPrompt(artType),
@@ -234,7 +237,6 @@ def get_work(work_type):
     )
     return work_they_want
 
-sl.set_page_config(page_title="Work_Identifier", page_icon=":book:")
 sl.header("Work Identifier")
 
 work_type = sl.selectbox(

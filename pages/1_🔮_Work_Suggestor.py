@@ -5,6 +5,9 @@ from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain, SequentialChain
 from utils.llm import getLLM
 
+
+sl.set_page_config(page_title="Work_Suggestions", page_icon=":book:")
+
 llm = getLLM(0)
 
 work_suggestion_template = """
@@ -31,12 +34,14 @@ work_suggestion_template = """
     TOPIC: {topic}
 """
 
+@sl.cache_data
 def getWorkSuggestionPrompt():
     return PromptTemplate(
         input_variables=["topic", "work_type"],
         template=work_suggestion_template,
     )
 
+@sl.cache_data
 def getWorkSuggestionChain():
     return LLMChain(
         llm=llm, prompt=getWorkSuggestionPrompt(), verbose=True, output_key='work_suggestions',
@@ -50,7 +55,6 @@ def get_work_desire():
     )
     return topic_they_want
 
-sl.set_page_config(page_title="Work_Suggestions", page_icon=":book:")
 sl.header("Work Suggestions")
 
 work_type = sl.selectbox(
