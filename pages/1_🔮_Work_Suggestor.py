@@ -20,6 +20,8 @@ work_suggestion_template = """
     In this existentialist classic, Roquentin's contemplation of existence in a small town becomes a profound exploration of the inherent nausea and meaninglessness of life.
     3. "The Road" by Cormac McCarthy:
     McCarthy's post-apocalyptic tale follows a father and son as they traverse a desolate world, reflecting on the futility of survival and the relentless march toward an uncertain future.
+    4. "One Hundred Years of Solitude" by Gabriel García Márquez:
+    Márquez's magical realist epic reflects on the cyclical nature of life, suggesting a sense of futility in the repetition of history and the human inability to escape predetermined patterns.
 
     Here is another example of paintings about the illusion of love:
     1: "The Lovers II" by René Magritte:
