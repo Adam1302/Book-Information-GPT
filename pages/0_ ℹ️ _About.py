@@ -8,13 +8,16 @@ from langchain.memory import ConversationBufferMemory
 
 sl.set_page_config(page_title="About", page_icon=":book:")
 
-sl.header("About")
+@sl.cache_resource
+def getPageImage():
+    return sl.image('pictures/other/searching_for_light.jpg')
 
-textCol, imageCol = sl.columns((1,1.2))
+textCol, imageCol = sl.columns((1,1.2), gap='large')
 with textCol:
+    sl.header("About")
     sl.markdown("It is neither widely accessible nor impartially reliable to explore and navigate a three thousand year history of great Art, Media, and Literature simply through recommendations. This tool can be used to identify, summarize, and/or suggest great works.")
-    sl.markdown("AML harnesses the power Large Language Models (LLMS), a type of artificial intelligence that uses large data sets and complex algorithms to hold, analyze, and generate content.")
-    sl.markdown("Please offer us some feedback in the 'Give Us Feedback' tab. Please note that this site is not for-profit and is personally funded by its creator; as a result, due to time or resource limitations, not all suggestions can be honoured.")
+    sl.markdown("AML harnesses the power Large Language Models (LLMs), a type of artificial intelligence that uses large data sets and complex algorithms to hold, analyze, and generate content.")
+    sl.markdown("Please offer us some feedback in the 'Give Us Feedback' tab.")
 
 with imageCol:
-    sl.image('pictures/other/growing_tree.jpg')
+    getPageImage()
