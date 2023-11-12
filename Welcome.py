@@ -24,6 +24,8 @@ os.environ['OPENAI_API_KEY'] = apikey
 
 # Branding: "Work" --> "AML"
 
+### Feedback page
+
 # Once all features are in, fix the layout: https://docs.streamlit.io/library/get-started/main-concepts#layout
 ### search up how to make streamlit look nice
 ### Use header, subheader, markdown, write, etc.
@@ -56,7 +58,16 @@ os.environ['OPENAI_API_KEY'] = apikey
 ## STREAMLIT PAGE
 sl.set_page_config(page_title="Art_Finder", page_icon=":book:")
 
-sl.write("WORK")
-sl.markdown("Here's what we offer:")
-sl.write("Work Suggestor: Receive a list of suggested works to look at based on what you're looking for")
-sl.write("Work Identifier: Enter the name or a description of a specific work and recieve information about it")
+@sl.cache_resource
+def getPageImage():
+    return sl.image("pictures/other/magritte_the_son_of_man.jpg", width=400)
+
+titleCol, imageCol = sl.columns({1,2}, gap='large')
+with titleCol:
+    sl.header("WORK")
+    sl.markdown("rebranding needed")
+    sl.write("")
+    sl.write("Click the 'About' tab to learn more")
+with imageCol:
+    getPageImage()
+
