@@ -10,8 +10,37 @@ os.environ['OPENAI_API_KEY'] = apikey
 ## AS PER: https://www.youtube.com/watch?v=U_eV8wfMkXU
 #   we will have a nice multi-columned explanation of what this site does
 
+# Change Feedback Form using this: https://docs.streamlit.io/library/api-reference/control-flow 
+
+# Add buttons for generating identifiers/suggestors
+
+# Add Page:
+### Give a checkbox/multiselect list of philosophers
+### For all philosophers clicked, get some opinions shared by them
+### ex. What are some opinions shared by Plato, Nietzsche, and Arendt?
+
+# Add Page: Prevailing opinions and timeframes
+### Use a slider for timeframe and a textbox for topic
+### ex. What was the prevailing opinion in the 1810s about multi-culturalism?
+### optional: location
+
+# Everything here: https://docs.streamlit.io/library/api-reference/status 
+
 # Add Page: What did {philosopher} say about {topic/description}?
 ### We'll need a list of philosophers
+
+# Add Page: Works within Timeframes
+### Find X {work_type}s within the time range (specified by two-headed slider)
+### https://youtu.be/sCvdt79asrE?list=TLGGTGC9_GhF4fYxMzExMjAyMw 
+
+# Page Idea: Give X different opinions on "topic/description" from philosophers
+
+# Add expanders on the About page to descibe the page functionalities
+
+# Use sl.status to show status: https://docs.streamlit.io/library/api-reference/status/st.status
+### Use this for loading responses
+
+# After finishing the rest of these, look at wtf this means: https://docs.streamlit.io/library/api-reference/session-state 
 
 # Use st.progress() to show progress
 ### https://docs.streamlit.io/library/get-started/main-concepts#show-progress

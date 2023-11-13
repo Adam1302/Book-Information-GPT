@@ -12,7 +12,7 @@ sl.markdown("Please note that this site is not for-profit and is personally fund
 sl.markdown("If you would like a response, please provide your email.")
 
 def get_email():
-    email = sl.text_area(
+    email = sl.text_input(
         label="Email (optional): ",
         placeholder="Enter email here",
         key="email_input"
