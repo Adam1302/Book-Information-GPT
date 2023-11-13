@@ -32,7 +32,8 @@ def check_email_validity(email):
 email_text = get_email()
 feedback_text = get_feedback()
 if feedback_text:
-    sl.write("BUTTON HERE")
-
-    if not check_email_validity(email_text):
-        sl.write("ERROR: Invalid email provided. Either enter a valid email or none at all.")
+    if sl.button("Submit Feedback", type='primary'):
+        if not check_email_validity(email_text):
+            sl.write("ERROR: Invalid email provided. Either enter a valid email or none at all.")
+        else:
+            sl.write("... Feedback submitted (but not implemented)")
