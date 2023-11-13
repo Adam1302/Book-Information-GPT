@@ -1,5 +1,6 @@
 import os
 import streamlit as sl
+from streamlit_extras.app_logo import add_logo
 from apikey import apikey # stored locally, not on Git
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain, SequentialChain
@@ -213,6 +214,7 @@ work_introduction_prompt = PromptTemplate(
 )
 
 sl.set_page_config(page_title="Work_Identifier", page_icon=":book:")
+add_logo("pictures/essentials/logo_x_small.png")
 
 llm = getLLM(0)
 
