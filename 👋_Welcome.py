@@ -10,22 +10,14 @@ os.environ['OPENAI_API_KEY'] = apikey
 ## AS PER: https://www.youtube.com/watch?v=U_eV8wfMkXU
 #   we will have a nice multi-columned explanation of what this site does
 
-# Creating Pages
-# https://docs.streamlit.io/library/get-started/multipage-apps
-### Create a main page with a nice picture or two
-### Create a nice About page with expandable drop-downs for each
-### Create a page for each service
-### Create a contact page and email
-
-### Better Layout -- resizable?
+# Add Page: What did {philosopher} say about {topic/description}?
+### We'll need a list of philosophers
 
 # Use st.progress() to show progress
 ### https://docs.streamlit.io/library/get-started/main-concepts#show-progress
 ### You could have a slider or a text-based setup
 
-# Branding: "Work" --> "AML"
-
-### Feedback page
+### Feedback page: actual implementation
 
 # Once all features are in, fix the layout: https://docs.streamlit.io/library/get-started/main-concepts#layout
 ### search up how to make streamlit look nice
@@ -48,13 +40,7 @@ os.environ['OPENAI_API_KEY'] = apikey
 ## TO BE MORE SPECIFIC, WE CAN HAVE MULTIPLE INPUT BOXES ##
 # ex. author, 
 
-# "Topic prompts: in the style of '...'"
-### creativity widget that controls temperature
-### 
-
 # Geospatial image of where artists, authors, lived/were born https://docs.streamlit.io/library/get-started/multipage-apps/create-a-multipage-app
-
-# AMAZON/KINDLE links (NVM: this is pretty expensive since you'll need an API like Rainforest)
 
 ## STREAMLIT PAGE
 sl.set_page_config(page_title="Art_Finder", page_icon=":book:")
@@ -67,7 +53,9 @@ def getPageImage():
 titleCol, imageCol = sl.columns({1,1.5}, gap='large')
 with titleCol:
     sl.title("Art, Media, and Literature (AML): A Navigator")
+    sl.divider()
     sl.subheader("A Work Suggestor and Identifier")
+    sl.divider()
     sl.write("Click the 'About' tab to learn more")
 with imageCol:
     getPageImage()
