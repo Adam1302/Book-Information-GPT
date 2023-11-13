@@ -1,5 +1,6 @@
 import os
 import streamlit as sl
+from streamlit_extras.app_logo import add_logo
 from apikey import apikey # stored locally, not on Git
 
 
@@ -57,16 +58,16 @@ os.environ['OPENAI_API_KEY'] = apikey
 
 ## STREAMLIT PAGE
 sl.set_page_config(page_title="Art_Finder", page_icon=":book:")
+add_logo("pictures/essentials/logo_x_small.png")
 
 @sl.cache_resource
 def getPageImage():
     return sl.image("pictures/other/magritte_the_son_of_man.jpg", width=400)
 
-titleCol, imageCol = sl.columns({1,2}, gap='large')
+titleCol, imageCol = sl.columns({1,1.5}, gap='large')
 with titleCol:
-    sl.header("WORK")
-    sl.markdown("rebranding needed")
-    sl.write("")
+    sl.title("Art, Media, and Literature (AML): A Navigator")
+    sl.subheader("A Work Suggestor and Identifier")
     sl.write("Click the 'About' tab to learn more")
 with imageCol:
     getPageImage()
