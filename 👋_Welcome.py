@@ -1,7 +1,8 @@
+from apikey import apikey # stored locally, not on Git
 import os
 import streamlit as sl
 from streamlit_extras.app_logo import add_logo
-from apikey import apikey # stored locally, not on Git
+
 
 
 os.environ['OPENAI_API_KEY'] = apikey
@@ -11,8 +12,6 @@ os.environ['OPENAI_API_KEY'] = apikey
 #   we will have a nice multi-columned explanation of what this site does
 
 # refactoring
-
-# Add buttons for generating identifiers/suggestors
 
 # Add Page:
 ### Give a checkbox/multiselect list of philosophers
