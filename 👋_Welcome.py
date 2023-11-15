@@ -10,7 +10,7 @@ os.environ['OPENAI_API_KEY'] = apikey
 ## AS PER: https://www.youtube.com/watch?v=U_eV8wfMkXU
 #   we will have a nice multi-columned explanation of what this site does
 
-# Change Feedback Form using this: https://docs.streamlit.io/library/api-reference/control-flow 
+# refactoring
 
 # Add buttons for generating identifiers/suggestors
 

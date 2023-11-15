@@ -17,9 +17,12 @@ book_template = """
     Q: Of Mice And Men
     A: Of Mice And Men (1937) by John Steinbeck
 
-    BOOK: {work_name}
+    Here is another example:
+    Q: guy names Jay who moves to New York and tries to win back his old girlfriend Daisy who is married to Tom
+    A: The Great Gatsby (1925) by F. Scott Fitzgerald
 
-    YOUR RESPONSE:
+    Q: {work_name}
+    A:
 """
 
 poem_template = """
@@ -218,7 +221,6 @@ add_logo("pictures/essentials/logo_x_small.png")
 
 llm = getLLM(0)
 
-@sl.cache_data
 def getWorkIdentifierChain(artType):
     return LLMChain(
         llm=llm, prompt=getWorkIdentifierPrompt(artType),
@@ -248,7 +250,7 @@ work_type = sl.selectbox(
 
 work_name_input = get_work(work_type)
 
-if work_name_input:
+if sl.button("Identify"):
     work_info = getWorkIdentifierChain(work_type).run(work_name_input)
     work_title = getWorkTitle(work_info, work_type).strip()
     work_intro = work_introduction_chain.run(work_title)

@@ -13,7 +13,7 @@ add_logo("pictures/essentials/logo_x_small.png")
 llm = getLLM(0)
 
 work_suggestion_template = """
-    Below you will recieve a topic or description. Your goal is to provide between 3 and 5 suggestions of a {work_type} related to the topic or description. For each {work_type}, provide a 1-2 sentence introduction without revealing details of the plot.
+    Below you will recieve a topic or description. Your goal is to provide between 3 and 5 suggestions of a {work_type} related to the topic or description. For each {work_type}, provide a short introduction without revealing details of the plot.
 
     Here is an example of fiction books about the ultimate futility of life:
     1. "The Stranger" by Albert Camus:
@@ -38,14 +38,12 @@ work_suggestion_template = """
     TOPIC: {topic}
 """
 
-@sl.cache_data
 def getWorkSuggestionPrompt():
     return PromptTemplate(
         input_variables=["topic", "work_type"],
         template=work_suggestion_template,
     )
 
-@sl.cache_data
 def getWorkSuggestionChain():
     return LLMChain(
         llm=llm, prompt=getWorkSuggestionPrompt(), verbose=True, output_key='work_suggestions',
@@ -68,7 +66,8 @@ work_type = sl.selectbox(
 
 topic_input = get_work_desire()
 
-if topic_input:
+if sl.button("Suggest") and (topic_input!="" and not topic_input.isspace()):
+
     suggestions = getWorkSuggestionChain().run({'topic': topic_input, 'work_type': work_type})
 
     sl.markdown(f"### Suggestions")
