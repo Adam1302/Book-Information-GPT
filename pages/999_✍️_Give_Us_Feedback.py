@@ -29,19 +29,18 @@ def get_feedback():
 def check_email_validity(email):
     return email=="" or email.isspace() or re.fullmatch(email_regex, email)
 
-with sl.form("my_form"):
-    email_val = get_email()
-    feedback_val = get_feedback()
 
-    # Every form must have a submit button.
-    submitted = sl.form_submit_button("Submit")
-    if submitted:
-        if not check_email_validity(email_val):
-            sl.write(":red[ERROR: Invalid email provided. Either enter a valid email or none at all.]")
-            submitted = False
-        elif feedback_val=="" or feedback_val.isspace():
-            sl.write(":red[ERROR: You haven't provided any feedback]")
-            submitted = False
-        else:
-            sl.write(":green[... Feedback submitted (but not implemented)]")
+email_val = get_email()
+feedback_val = get_feedback()
+
+# Every form must have a submit button.
+if sl.button("Submit"):
+    if not check_email_validity(email_val):
+        sl.error(":red[ERROR: Invalid email provided. Either enter a valid email or none at all.]")
+        submitted = False
+    elif feedback_val=="" or feedback_val.isspace():
+        sl.error(":red[ERROR: You haven't provided any feedback]")
+        submitted = False
+    else:
+        sl.write(":green[... Feedback submitted (but not implemented)]")
 
