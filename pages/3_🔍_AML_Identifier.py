@@ -84,16 +84,21 @@ work_type = sl.selectbox(
 work_name_input = get_work(work_type)
 
 if sl.button("Identify"):
-    work_info = getWorkIdentifierChain(work_type).run(work_name_input)
-    work_title = getWorkTitle(work_info, work_type).strip()
-    work_intro = work_introduction_chain.run(work_title)
+    hasImbdRating = work_type == "Movie" or work_type == "TV Show" or work_type == "Documentary"
+
+    with sl.spinner('Searching'):
+        work_info = getWorkIdentifierChain(work_type).run(work_name_input)
+        work_title = getWorkTitle(work_info, work_type).strip()
+        if hasImbdRating:
+            work_rating = work_rating_chain.run(work_title)
+        work_intro = work_introduction_chain.run(work_title)
 
     sl.markdown(f"### {work_type}:")
     sl.write(work_info)
 
-    if (work_type == "Movie" or work_type == "TV Show" or work_type == "Documentary"):
+    if hasImbdRating:
         sl.markdown("### iMDB Rating:")
-        sl.write(work_rating_chain.run(work_title))
+        sl.write(work_rating)
 
     sl.markdown("### About:")
     sl.write(work_intro)

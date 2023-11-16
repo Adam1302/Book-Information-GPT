@@ -11,8 +11,6 @@ os.environ['OPENAI_API_KEY'] = apikey
 ## AS PER: https://www.youtube.com/watch?v=U_eV8wfMkXU
 #   we will have a nice multi-columned explanation of what this site does
 
-# refactoring
-
 # Add Page:
 ### Give a checkbox/multiselect list of philosophers
 ### For all philosophers clicked, get some opinions shared by them
@@ -22,6 +20,8 @@ os.environ['OPENAI_API_KEY'] = apikey
 ### Use a slider for timeframe and a textbox for topic
 ### ex. What was the prevailing opinion in the 1810s about multi-culturalism?
 ### optional: location
+
+# Identifier Defect: "Introduce ..."
 
 # Everything here: https://docs.streamlit.io/library/api-reference/status 
 
@@ -64,9 +64,6 @@ os.environ['OPENAI_API_KEY'] = apikey
 
 # Advertise
 ### Create reddit account and share
-
-## TO BE MORE SPECIFIC, WE CAN HAVE MULTIPLE INPUT BOXES ##
-# ex. author, 
 
 # Geospatial image of where artists, authors, lived/were born https://docs.streamlit.io/library/get-started/multipage-apps/create-a-multipage-app
 

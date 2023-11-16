@@ -43,7 +43,8 @@ topic_input = get_work_desire()
 
 if sl.button("Suggest") and (topic_input!="" and not topic_input.isspace()):
 
-    suggestions = getWorkSuggestionChain().run({'topic': topic_input, 'work_type': work_type})
+    with sl.spinner('Getting suggestions'):
+        suggestions = getWorkSuggestionChain().run({'topic': topic_input, 'work_type': work_type})
 
     sl.markdown(f"### Suggestions")
     sl.write(suggestions)
