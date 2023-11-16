@@ -41,19 +41,12 @@ os.environ['OPENAI_API_KEY'] = apikey
 
 # After finishing the rest of these, look at wtf this means: https://docs.streamlit.io/library/api-reference/session-state 
 
-# Use st.progress() to show progress
-### https://docs.streamlit.io/library/get-started/main-concepts#show-progress
-### You could have a slider or a text-based setup
-
 ### Feedback page: actual implementation
 
 # Once all features are in, fix the layout: https://docs.streamlit.io/library/get-started/main-concepts#layout
 ### search up how to make streamlit look nice
 ### Use header, subheader, markdown, write, etc.
 ### Have the input columns in a nice sidebar: https://docs.streamlit.io/library/get-started/multipage-apps/create-a-multipage-app
-
-# For long-running functions: https://docs.streamlit.io/library/get-started/main-concepts#caching
-### this is a MUST-do for all functions that have similar runs
 
 # Use WIkipedia API to link names to their pages
 

@@ -36,10 +36,10 @@ feedback_val = get_feedback()
 # Every form must have a submit button.
 if sl.button("Submit"):
     if not check_email_validity(email_val):
-        sl.error(":red[ERROR: Invalid email provided. Either enter a valid email or none at all.]")
+        sl.error(":red[ERROR: Invalid email provided. Either enter a valid email or none at all.]", icon="🚨")
         submitted = False
     elif feedback_val=="" or feedback_val.isspace():
-        sl.error(":red[ERROR: You haven't provided any feedback]")
+        sl.error(":red[ERROR: You haven't provided any feedback]", icon="🚨")
         submitted = False
     else:
         sl.write(":green[... Feedback submitted (but not implemented)]")
