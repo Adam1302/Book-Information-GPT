@@ -3,18 +3,11 @@ import streamlit as sl
 from streamlit_extras.app_logo import add_logo
 from apikey import apikey
 from langchain.prompts import PromptTemplate
-from langchain.chains import LLMChain, SequentialChain
+from langchain.chains import LLMChain
 from utils.llm import getLLM
 from utils.philosopher_list import shortened_philosopher_list, extensive_philosopher_list
-from utils.templates import book_template
+from utils.templates import shared_opinion_template, disagreements_template
 
-shared_opinion_template = """
-What are some opinions shared by {philosopher_list}?
-"""
-
-disagreements_template = """
-What are some topics of disagreement between {philosopher_list}?
-"""
 
 def getSharedOpinionPrompt():
     return PromptTemplate(

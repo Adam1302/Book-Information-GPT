@@ -193,3 +193,10 @@ work_introduction_template = """
     Introduce {work_title} in one paragraph
 """
 
+shared_opinion_template = """
+What are some opinions shared by {philosopher_list}?
+"""
+
+disagreements_template = """
+What are some topics of disagreement between {philosopher_list}?
+"""
