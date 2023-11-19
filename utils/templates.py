@@ -1,6 +1,7 @@
 
-work_suggestion_template = """
-    Below you will recieve a topic or description. Your goal is to provide between 3 and 5 suggestions of a {work_type} related to the topic or description. For each {work_type}, provide a short introduction without revealing details of the plot.
+def getWorkSuggestionTemplate(work_type, topic):
+    return """
+    Below you will recieve a topic or description. Your goal is to provide between 3 and 5 suggestions of a """ + work_type + """ related to the topic or description. For each """ + work_type + """, provide a short introduction without revealing details of the plot.
 
     Here is an example of fiction books about the ultimate futility of life:
     1. "The Stranger" by Albert Camus:
@@ -22,7 +23,7 @@ work_suggestion_template = """
     4: "The Birth of Venus" by Sandro Botticelli:
     Botticelli's iconic painting of Venus emerging from the sea symbolizes the idealized and mythological aspects of love, inviting contemplation on the illusionary nature of beauty and desire.
 
-    TOPIC: {topic}
+    TOPIC: """ + topic + """
 """
 
 book_template = """
