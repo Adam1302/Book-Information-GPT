@@ -26,7 +26,7 @@ def getOpinionChain():
         verbose=True, output_key='philosopher_opinion',
     )
 
-pictureCol, philosopherCol = sl.columns((2,1), gap='medium')
+philosopherCol, pictureCol = sl.columns((1,2), gap='medium')
 with pictureCol:
     sl.image("pictures/other/growing_tree.jpg")
 with philosopherCol:

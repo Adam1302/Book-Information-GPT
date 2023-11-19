@@ -28,10 +28,6 @@ os.environ['OPENAI_API_KEY'] = apikey
 # Add Page: What did {philosopher} say about {topic/description}?
 ### We'll need a list of philosophers
 
-# Add Page: Works within Timeframes
-### Find X {work_type}s within the time range (specified by two-headed slider)
-### https://youtu.be/sCvdt79asrE?list=TLGGTGC9_GhF4fYxMzExMjAyMw 
-
 # Page Idea: Give X different opinions on "topic/description" from philosophers
 
 # Add expanders on the About page to descibe the page functionalities
