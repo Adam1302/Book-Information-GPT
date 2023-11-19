@@ -11,12 +11,12 @@ from utils.templates import shared_opinion_template, disagreements_template
 
 def getSharedOpinionPrompt():
     return PromptTemplate(
-        input_variables=["work_name"],
+        input_variables=["philosopher_list"],
         template=shared_opinion_template,
     )
 def getDisagreementsPrompt():
     return PromptTemplate(
-        input_variables=["work_name"],
+        input_variables=["philosopher_list"],
         template=disagreements_template,
     )
 
