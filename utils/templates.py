@@ -200,3 +200,8 @@ What are some opinions shared by {philosopher_list}?
 disagreements_template = """
 What are some topics of disagreement between {philosopher_list}?
 """
+
+philosopher_opinion_on_topic_template = """
+Describe {philosopher}'s opinion on the topic below. Answer with two paragraphs.
+TOPIC: {topic}
+"""
