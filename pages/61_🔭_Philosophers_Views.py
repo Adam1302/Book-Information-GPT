@@ -1,30 +1,12 @@
-import os
 import streamlit as sl
 from streamlit_extras.app_logo import add_logo
-from apikey import apikey
-from langchain.prompts import PromptTemplate
-from langchain.chains import LLMChain
-from utils.llm import getLLM
+from utils.llm import getOpenAIClient
 from utils.philosopher_list import shortened_philosopher_list, extensive_philosopher_list
-from utils.templates import philosopher_opinion_on_topic_template
-
-
-def getOpinionPrompt():
-    return PromptTemplate(
-        input_variables=["philosopher", "topic"],
-        template=philosopher_opinion_on_topic_template,
-    )
 
 sl.set_page_config(page_title="Philosopher Views", page_icon=":book:")
 add_logo("pictures/essentials/logo_x_small.png")
 
-llm = getLLM(0)
-
-def getOpinionChain():
-    return LLMChain(
-        llm=llm, prompt=getOpinionPrompt(),
-        verbose=True, output_key='philosopher_opinion',
-    )
+client = getOpenAIClient()
 
 philosopherCol, pictureCol = sl.columns((1,2), gap='medium')
 with pictureCol:
@@ -63,8 +45,23 @@ topic_input = get_topic()
 if sl.button(f"Get Opinion") and topic_input and philosopher_selected:
 
     with sl.spinner('Collecting'):
-        opinion_result= getOpinionChain().run({'philosopher': philosopher_selected, 'topic': topic_input})
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+            {
+                "role": "user",
+                "content": "Describe " + philosopher_selected + "'s opinion on the topic below. Answer with two paragraphs. TOPIC: " + topic_input,
+            }
+            ],
+            stream=True
+        )
 
-    #sl.markdown(f"### {work_type}:")
-    sl.write(opinion_result)
+    placeholder = sl.empty()
+    full_response = ''
+    for item in response:
+        temp_str = item.choices[0].delta.content
+        if temp_str is not None:
+            full_response += temp_str
+        placeholder.write(full_response)
+    placeholder.write(full_response)
 
