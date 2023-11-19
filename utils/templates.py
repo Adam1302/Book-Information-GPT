@@ -205,3 +205,7 @@ philosopher_opinion_on_topic_template = """
 Describe {philosopher}'s opinion on the topic below. Answer with two paragraphs.
 TOPIC: {topic}
 """
+
+different_views_template = """
+Provide as many different philosophical views as you can on the topic below. For each view, provide a paragraph of explanation:\\nTopic: {topic}\\n
+"""
