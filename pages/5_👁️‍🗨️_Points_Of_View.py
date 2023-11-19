@@ -38,8 +38,16 @@ if open_mind_btn and topic_input:
                 "role": "user",
                 "content": "Provide as many different philosophical views as you can on the topic below. For each view, provide a paragraph of explanation. Rather than general and non-confrontation opinions, please provide specific opinionated stances.: Topic: " + topic_input,
             }
-        ],
-        ).choices[0].message.content
+            ],
+            stream=True
+        )
 
-    sl.write(response)
+    placeholder = sl.empty()
+    full_response = ''
+    for item in response:
+        temp_str = item.choices[0].delta.content
+        if temp_str is not None:
+            full_response += temp_str
+        placeholder.write(full_response)
+    placeholder.write(full_response)
 
