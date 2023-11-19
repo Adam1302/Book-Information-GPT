@@ -53,8 +53,9 @@ if sl.button(f"Get {relation_type}") and philosophers_input:
                         "role": "user",
                         "content": "What are some opinions shared by " + philosophers_as_string,
                     }
-                ],
-                ).choices[0].message.content
+                    ],
+                    stream=True
+                )
             else:
                 opinions_result= client.chat.completions.create(
                     model="gpt-3.5-turbo",
@@ -63,7 +64,15 @@ if sl.button(f"Get {relation_type}") and philosophers_input:
                         "role": "user",
                         "content": "What are some topics of disagreement between " + philosophers_as_string,
                     }
-                ],
-                ).choices[0].message.content
-        sl.write(opinions_result)
+                    ],
+                    stream=True
+                )
+        placeholder = sl.empty()
+        full_response = ''
+        for item in opinions_result:
+            temp_str = item.choices[0].delta.content
+            if temp_str is not None:
+                full_response += temp_str
+            placeholder.write(full_response)
+        placeholder.write(full_response)
 
