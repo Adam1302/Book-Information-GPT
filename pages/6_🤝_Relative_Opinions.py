@@ -1,40 +1,13 @@
-import os
 import streamlit as sl
 from streamlit_extras.app_logo import add_logo
-from apikey import apikey
-from langchain.prompts import PromptTemplate
-from langchain.chains import LLMChain
-from utils.llm import getLLM
+from utils.llm import getOpenAIClient
 from utils.philosopher_list import shortened_philosopher_list, extensive_philosopher_list
-from utils.templates import shared_opinion_template, disagreements_template
 
-
-def getSharedOpinionPrompt():
-    return PromptTemplate(
-        input_variables=["philosopher_list"],
-        template=shared_opinion_template,
-    )
-def getDisagreementsPrompt():
-    return PromptTemplate(
-        input_variables=["philosopher_list"],
-        template=disagreements_template,
-    )
 
 sl.set_page_config(page_title="Relative Opinions", page_icon=":book:")
 add_logo("pictures/essentials/logo_x_small.png")
 
-llm = getLLM(0)
-
-def getSharedOpinionChain():
-    return LLMChain(
-        llm=llm, prompt=getSharedOpinionPrompt(),
-        verbose=True, output_key='shared_opinions',
-    )
-def getDisagreementsChain():
-    return LLMChain(
-        llm=llm, prompt=getDisagreementsPrompt(),
-        verbose=True, output_key='disagreements',
-    )
+client = getOpenAIClient()
 
 sl.header("Philosophers: Relative Opinions")
 
@@ -70,13 +43,27 @@ if sl.button(f"Get {relation_type}") and philosophers_input:
     if len(philosophers_input) == 1:
         sl.error("You must select multiple options.", icon='🚨')
     else:
-        with sl.spinner('Collecting'):
+        with sl.spinner('Collecting... This might take a couple minutes.'):
             philosophers_as_string = "{}, and {}".format(", ".join(philosophers_input[:-1]),  philosophers_input[-1])
             if relation_type == 'Agreements':
-                opinions_result= getSharedOpinionChain().run(philosophers_as_string)
+                opinions_result= client.chat.completions.create(
+                    model="gpt-3.5-turbo",
+                    messages=[
+                    {
+                        "role": "user",
+                        "content": "What are some opinions shared by " + philosophers_as_string,
+                    }
+                ],
+                ).choices[0].message.content
             else:
-                opinions_result= getDisagreementsChain().run(philosophers_as_string)
-
-        #sl.markdown(f"### {work_type}:")
+                opinions_result= client.chat.completions.create(
+                    model="gpt-3.5-turbo",
+                    messages=[
+                    {
+                        "role": "user",
+                        "content": "What are some topics of disagreement between " + philosophers_as_string,
+                    }
+                ],
+                ).choices[0].message.content
         sl.write(opinions_result)
 

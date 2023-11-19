@@ -41,5 +41,5 @@ if open_mind_btn and topic_input:
         ],
         ).choices[0].message.content
 
-        sl.write(response)
+    sl.write(response)
 
