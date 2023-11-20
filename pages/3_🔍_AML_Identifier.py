@@ -25,11 +25,23 @@ def getWorkTitle(infoOutput, work_type):
     if (work_type == "Book" or work_type == "Poem" or work_type == "Painting" or work_type == "Sculpture" or work_type == "Play/Musical"):
         return infoOutput
     elif work_type == "Movie":
-        return infoOutput[0:infoOutput.index("Directed by")]
+        try:
+            title = infoOutput[0:infoOutput.index("Directed by")]
+        except:
+            title = ""
+        return title
     elif work_type == "TV Show":
-        return infoOutput[0:infoOutput.index('[')]
+        try:
+            title = infoOutput[0:infoOutput.index('[')]
+        except:
+            title = ""
+        return title
     elif work_type == "Documentary":
-        return infoOutput[0:(infoOutput.index(')') + 1)]
+        try:
+            title = infoOutput[0:(infoOutput.index(')') + 1)]
+        except:
+            title = ""
+        return title
 
 sl.set_page_config(page_title="Work_Identifier", page_icon=":book:")
 add_logo("pictures/essentials/logo_x_small.png")
@@ -71,40 +83,40 @@ if sl.button("Identify"):
         sl.write(work_info)
     
     work_title = getWorkTitle(work_info, work_type).strip()
-
-    if hasImbdRating:
-        with sl.spinner('Searching for work'):
-            sl.markdown("### iMDB Rating:")
-            work_rating = client.chat.completions.create(
+    if not work_title == "":
+        if hasImbdRating:
+            with sl.spinner('Searching for work'):
+                sl.markdown("### iMDB Rating:")
+                work_rating = client.chat.completions.create(
+                    model="gpt-3.5-turbo",
+                    messages=[
+                    {
+                        "role": "user",
+                        "content": getWorkRatingTemplate(work_title),
+                    }
+                    ],
+                    stream=False
+                ).choices[0].message.content
+            sl.write(work_rating)
+        
+        with sl.spinner("Retrieving mroe information"):
+            sl.markdown("### About:")
+            work_intro = client.chat.completions.create(
                 model="gpt-3.5-turbo",
                 messages=[
                 {
                     "role": "user",
-                    "content": getWorkRatingTemplate(work_title),
+                    "content": getWorkIntroductionTemplate(work_title),
                 }
                 ],
-                stream=False
-            ).choices[0].message.content
-        sl.write(work_rating)
-    
-    with sl.spinner("Retrieving mroe information"):
-        sl.markdown("### About:")
-        work_intro = client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[
-            {
-                "role": "user",
-                "content": getWorkIntroductionTemplate(work_title),
-            }
-            ],
-            stream=True
-        )
-    placeholder = sl.empty()
-    full_response = ''
-    for item in work_intro:
-        temp_str = item.choices[0].delta.content
-        if temp_str is not None:
-            full_response += temp_str
+                stream=True
+            )
+        placeholder = sl.empty()
+        full_response = ''
+        for item in work_intro:
+            temp_str = item.choices[0].delta.content
+            if temp_str is not None:
+                full_response += temp_str
+            placeholder.write(full_response)
         placeholder.write(full_response)
-    placeholder.write(full_response)
 
