@@ -21,12 +21,13 @@ os.environ['OPENAI_API_KEY'] = apikey
 ### ex. What was the prevailing opinion in the 1810s about multi-culturalism?
 ### optional: location
 
+# Add Page: Poem Generator about [TOPIC] in style of [...]
+
 # Identifier Defect: "Introduce ..."
 
 # Everything here: https://docs.streamlit.io/library/api-reference/status 
 
-# Add Page: What did {philosopher} say about {topic/description}?
-### We'll need a list of philosophers
+# Multi-threading: https://github.com/openai/openai-python
 
 # Page Idea: Give X different opinions on "topic/description" from philosophers
 
