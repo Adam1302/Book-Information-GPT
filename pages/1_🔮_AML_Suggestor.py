@@ -1,28 +1,13 @@
-import os
 import streamlit as sl
 from streamlit_extras.app_logo import add_logo
-from apikey import apikey # stored locally, not on Git
-from langchain.prompts import PromptTemplate
-from langchain.chains import LLMChain, SequentialChain
-from utils.llm import getLLM
-from utils.templates import work_suggestion_template
+from utils.llm import getOpenAIClient
+from utils.templates import getWorkSuggestionTemplate
 
 
 sl.set_page_config(page_title="Work_Suggestions", page_icon=":book:")
 add_logo("pictures/essentials/logo_x_small.png")
 
-llm = getLLM(0)
-
-def getWorkSuggestionPrompt():
-    return PromptTemplate(
-        input_variables=["topic", "work_type"],
-        template=work_suggestion_template,
-    )
-
-def getWorkSuggestionChain():
-    return LLMChain(
-        llm=llm, prompt=getWorkSuggestionPrompt(), verbose=True, output_key='work_suggestions',
-    )
+client = getOpenAIClient()
 
 def get_work_desire():
     topic_they_want = sl.text_area(
@@ -44,7 +29,22 @@ topic_input = get_work_desire()
 if sl.button("Suggest") and (topic_input!="" and not topic_input.isspace()):
 
     with sl.spinner('Getting suggestions'):
-        suggestions = getWorkSuggestionChain().run({'topic': topic_input, 'work_type': work_type})
+        result= client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+            {
+                "role": "user",
+                "content": getWorkSuggestionTemplate(work_type, topic_input),
+            }
+            ],
+            stream=True
+        )
 
-    sl.markdown(f"### Suggestions")
-    sl.write(suggestions)
+    placeholder = sl.empty()
+    full_response = ''
+    for item in result:
+        temp_str = item.choices[0].delta.content
+        if temp_str is not None:
+            full_response += temp_str
+        placeholder.write(full_response)
+    placeholder.write(full_response)

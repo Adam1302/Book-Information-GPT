@@ -1,70 +1,52 @@
-import os
 import streamlit as sl
 from streamlit_extras.app_logo import add_logo
-from apikey import apikey # stored locally, not on Git
-from langchain.prompts import PromptTemplate
-from langchain.chains import LLMChain, SequentialChain
-from utils.llm import getLLM
-from utils.templates import book_template, poem_template, movie_template, tv_show_template, documentary_template, painting_template, sculpture_template, theatre_template, work_rating_template, work_introduction_template
+from utils.llm import getOpenAIClient
+from utils.templates import getBookTemplate, getDocumentaryTemplate, getWorkIntroductionTemplate, getMovieTemplate, getPaintingTemplate, getPoemTemplate, getSculptureTemplate, getTheatreTemplate, getTvShowTemplate, getWorkRatingTemplate
 
-def getTemplate(artType):
+def getTemplate(artType, work_name):
     if (artType == "Book"):
-        return book_template
+        return getBookTemplate(work_name)
     elif (artType == "Poem"):
-        return poem_template
+        return getPoemTemplate(work_name)
     elif (artType == "Movie"):
-        return movie_template
+        return getMovieTemplate(work_name)
     elif (artType == "TV Show"):
-        return tv_show_template
+        return getTvShowTemplate(work_name)
     elif (artType == "Documentary"):
-        return documentary_template
+        return getDocumentaryTemplate(work_name)
     elif (artType == "Painting"):
-        return painting_template
+        return getPaintingTemplate(work_name)
     elif (artType == "Sculpture"):
-        return sculpture_template
+        return getSculptureTemplate(work_name)
     elif (artType == "Play/Musical"):
-        return theatre_template
+        return getTheatreTemplate(work_name)
 
 def getWorkTitle(infoOutput, work_type):
     if (work_type == "Book" or work_type == "Poem" or work_type == "Painting" or work_type == "Sculpture" or work_type == "Play/Musical"):
         return infoOutput
     elif work_type == "Movie":
-        return infoOutput[0:infoOutput.index("Directed by")]
+        try:
+            title = infoOutput[0:infoOutput.index("Directed by")]
+        except:
+            title = ""
+        return title
     elif work_type == "TV Show":
-        return infoOutput[0:infoOutput.index('[')]
+        try:
+            title = infoOutput[0:infoOutput.index('[')]
+        except:
+            title = ""
+        return title
     elif work_type == "Documentary":
-        return infoOutput[0:(infoOutput.index(')') + 1)]
-
-def getWorkIdentifierPrompt(artType):
-    return PromptTemplate(
-        input_variables=["work_name"],
-        template=getTemplate(artType),
-    )
-work_rating_prompt = PromptTemplate(
-    input_variables=["work_title"],
-    template=work_rating_template,
-)
-work_introduction_prompt = PromptTemplate(
-    input_variables=["work_title"],
-    template=work_introduction_template,
-)
+        try:
+            title = infoOutput[0:(infoOutput.index(')') + 1)]
+        except:
+            title = ""
+        return title
 
 sl.set_page_config(page_title="Work_Identifier", page_icon=":book:")
 add_logo("pictures/essentials/logo_x_small.png")
 
-llm = getLLM(0)
-
-def getWorkIdentifierChain(artType):
-    return LLMChain(
-        llm=llm, prompt=getWorkIdentifierPrompt(artType),
-        verbose=True, output_key='work_title',
-    )
-work_rating_chain = LLMChain(
-    llm=llm, prompt=work_rating_prompt, verbose=True, output_key='work_rating',
-)
-work_introduction_chain = LLMChain(
-    llm=llm, prompt=work_introduction_prompt, verbose=True, output_key='work_intro',
-)
+client = getOpenAIClient()
 
 def get_work(work_type):
     work_they_want = sl.text_area(
@@ -86,19 +68,55 @@ work_name_input = get_work(work_type)
 if sl.button("Identify"):
     hasImbdRating = work_type == "Movie" or work_type == "TV Show" or work_type == "Documentary"
 
-    with sl.spinner('Searching'):
-        work_info = getWorkIdentifierChain(work_type).run(work_name_input)
-        work_title = getWorkTitle(work_info, work_type).strip()
+    with sl.spinner('Searching for work'):
+        sl.markdown(f"### {work_type}:")
+        work_info = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+            {
+                "role": "user",
+                "content": getTemplate(work_type, work_name_input),
+            }
+            ],
+            stream=False
+        ).choices[0].message.content
+        sl.write(work_info)
+    
+    work_title = getWorkTitle(work_info, work_type).strip()
+    if not work_title == "":
         if hasImbdRating:
-            work_rating = work_rating_chain.run(work_title)
-        work_intro = work_introduction_chain.run(work_title)
+            with sl.spinner('Searching for work'):
+                sl.markdown("### iMDB Rating:")
+                work_rating = client.chat.completions.create(
+                    model="gpt-3.5-turbo",
+                    messages=[
+                    {
+                        "role": "user",
+                        "content": getWorkRatingTemplate(work_title),
+                    }
+                    ],
+                    stream=False
+                ).choices[0].message.content
+            sl.write(work_rating)
+        
+        with sl.spinner("Retrieving mroe information"):
+            sl.markdown("### About:")
+            work_intro = client.chat.completions.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                {
+                    "role": "user",
+                    "content": getWorkIntroductionTemplate(work_title),
+                }
+                ],
+                stream=True
+            )
+        placeholder = sl.empty()
+        full_response = ''
+        for item in work_intro:
+            temp_str = item.choices[0].delta.content
+            if temp_str is not None:
+                full_response += temp_str
+            placeholder.write(full_response)
+        placeholder.write(full_response)
 
-    sl.markdown(f"### {work_type}:")
-    sl.write(work_info)
-
-    if hasImbdRating:
-        sl.markdown("### iMDB Rating:")
-        sl.write(work_rating)
-
-    sl.markdown("### About:")
-    sl.write(work_intro)

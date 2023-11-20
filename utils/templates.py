@@ -1,6 +1,7 @@
 
-work_suggestion_template = """
-    Below you will recieve a topic or description. Your goal is to provide between 3 and 5 suggestions of a {work_type} related to the topic or description. For each {work_type}, provide a short introduction without revealing details of the plot.
+def getWorkSuggestionTemplate(work_type, topic):
+    return """
+    Below you will recieve a topic or description. Your goal is to provide between 3 and 5 suggestions of a """ + work_type + """ related to the topic or description. For each """ + work_type + """, provide a short introduction without revealing details of the plot.
 
     Here is an example of fiction books about the ultimate futility of life:
     1. "The Stranger" by Albert Camus:
@@ -22,176 +23,180 @@ work_suggestion_template = """
     4: "The Birth of Venus" by Sandro Botticelli:
     Botticelli's iconic painting of Venus emerging from the sea symbolizes the idealized and mythological aspects of love, inviting contemplation on the illusionary nature of beauty and desire.
 
-    TOPIC: {topic}
+    TOPIC: """ + topic + """
 """
 
-book_template = """
-    You will receive information about a book.
-    Your goal is to:
-    - Find the book
-    - Find the author
-    - Find the year in which it was written
+def getBookTemplate(work_name):
+    return """
+        You will receive information about a book.
+        Your goal is to:
+        - Find the book
+        - Find the author
+        - Find the year in which it was written
 
-    Here is an example:
-    Q: Of Mice And Men
-    A: Of Mice And Men (1937) by John Steinbeck
+        Here is an example:
+        Q: Of Mice And Men
+        A: Of Mice And Men (1937) by John Steinbeck
 
-    Here is another example:
-    Q: guy names Jay who moves to New York and tries to win back his old girlfriend Daisy who is married to Tom
-    A: The Great Gatsby (1925) by F. Scott Fitzgerald
+        Here is another example:
+        Q: guy names Jay who moves to New York and tries to win back his old girlfriend Daisy who is married to Tom
+        A: The Great Gatsby (1925) by F. Scott Fitzgerald
 
-    Q: {work_name}
-    A:
-"""
+        Q: """ + work_name + """
+        A:
+    """
 
-poem_template = """
-    You will receive information about a poem.
-    Your goal is to:
-    - Find the poem
-    - Find the poet
-    - Find the year in which it was written
+def getPoemTemplate(work_name):
+    return """
+        You will receive information about a poem.
+        Your goal is to:
+        - Find the poem
+        - Find the poet
+        - Find the year in which it was written
 
-    Here is an example:
-    Q: O Captain! My Captain!
-    A: O' Captain, My Captain (1865) by Walt Whitman
+        Here is an example:
+        Q: O Captain! My Captain!
+        A: O' Captain, My Captain (1865) by Walt Whitman
 
-    POEM: {work_name}
+        Q: """ + work_name + """
+        A:
+    """
 
-    YOUR RESPONSE:
-"""
+def getMovieTemplate(work_name):
+    return """
+        You will receive information about a movie.
+        Your goal is to:
+        - Find the movie
+        - Find the director
+        - Find the writer
+        - Find the year in which it was released
+        - Find the actors/actresses who starred in the movie
 
-movie_template = """
-    You will receive information about a movie.
-    Your goal is to:
-    - Find the movie
-    - Find the director
-    - Find the writer
-    - Find the year in which it was released
-    - Find the actors/actresses who starred in the movie
-
-    Here is an example:
-    Q:
-    Taxi Driver
-    A:
-    Taxi Driver (1976)\n
-    Directed by Martin Scorcese\n
-    Written by Paul Schrader\n
-    Starring Robert De Niro, Jodie Foster, Harvey Keitel, Cybill Shepherd
-
-
-    MOVIE: {work_name}
-
-    YOUR RESPONSE:
-"""
-
-tv_show_template = """
-    You will receive information about a television show.
-    Your goal is to:
-    - Find the show
-    - Find the creator of the show
-    - Find the actors/actresses who starred in the show
-    - Find the year in which it began
-    - Find the year in which it ended. If it hasn't ended, display 'present'.
-    - Find the number of seasons
-
-    Here are two examples:
-    Q:
-    The Sopranos
-    A:
-    Sopranos (1999-2007) [6 seasons]\n
-    Created by David Chase\n
-    Starring James Gandolfini, Michael Imperioli, Edie Falco, Lorraine Bracco\n
-
-    Q:
-    8 Out of 10 Cats (2005-present) [21 seasons]\n
-    Created by Channel 4\n
-    Starring Jimmy Carr, Sean Lock, Jon Richardson\n
+        Here is an example:
+        Q:
+        Taxi Driver
+        A:
+        Taxi Driver (1976)\n
+        Directed by Martin Scorcese\n
+        Written by Paul Schrader\n
+        Starring Robert De Niro, Jodie Foster, Harvey Keitel, Cybill Shepherd
 
 
-    SHOW: {work_name}
+        Q: """ + work_name + """
+        A:
+    """
 
-    YOUR RESPONSE:
-"""
+def getTvShowTemplate(work_name):
+    return """
+        You will receive information about a television show.
+        Your goal is to:
+        - Find the show
+        - Find the creator of the show
+        - Find the actors/actresses who starred in the show
+        - Find the year in which it began
+        - Find the year in which it ended. If it hasn't ended, display 'present'.
+        - Find the number of seasons
 
-documentary_template = """
-    You will receive information about a documentary.
-    Your goal is to:
-    - Find the documentary
-    - Find the Director
-    - Find the year in which it was released
+        Here are two examples:
+        Q:
+        The Sopranos
+        A:
+        Sopranos (1999-2007) [6 seasons]\n
+        Created by David Chase\n
+        Starring James Gandolfini, Michael Imperioli, Edie Falco, Lorraine Bracco\n
 
-    Here is an example:
-    Q:
-    Grizzly Man
-    A:
-    Grizzly Man (2005)\n
-    Directed by Werner Herzog
+        Q: 8 Out of 10 Cats
+        A:
+        8 Out of 10 Cats (2005-present) [21 seasons]\n
+        Created by Channel 4\n
+        Starring Jimmy Carr, Sean Lock, Jon Richardson\n
+
+        Q: """ + work_name + """
+        A:
+    """
+
+def getDocumentaryTemplate(work_name):
+    return """
+        You will receive information about a documentary.
+        Your goal is to:
+        - Find the documentary
+        - Find the Director
+        - Find the year in which it was released
+
+        Here is an example:
+        Q:
+        Grizzly Man
+        A:
+        Grizzly Man (2005)\n
+        Directed by Werner Herzog
 
 
-    DOCUMENTARY: {work_name}
+        Q: """ + work_name + """
+        A:
+    """
 
-    YOUR RESPONSE:
-"""
+def getPaintingTemplate(work_name):
+    return """
+        You will receive information about a painting.
+        Your goal is to:
+        - Find the painting
+        - Find the artist
+        - Find the year in which it was completed
 
-painting_template = """
-    You will receive information about a painting.
-    Your goal is to:
-    - Find the painting
-    - Find the artist
-    - Find the year in which it was completed
+        Here is an example:
+        Q: Mona Lisa
+        A: Mona Lisa (1519) by Leonardo da Vinci
 
-    Here is an example:
-    Q: Mona Lisa
-    A: Mona Lisa (1519) by Leonardo da Vinci
+        Q: """ + work_name + """
+        A:
+    """
 
-    Painting: {work_name}
 
-    YOUR RESPONSE:
-"""
+def getSculptureTemplate(work_name):
+    return """
+        You will receive information about a sculpture.
+        Your goal is to:
+        - Find the sculpture
+        - Find the sculptor
+        - Find the year in which it was completed
 
-sculpture_template = """
-    You will receive information about a sculpture.
-    Your goal is to:
-    - Find the sculpture
-    - Find the sculptor
-    - Find the year in which it was completed
+        Here is an example:
+        Q: The Thinker
+        A: The Thinker (1904) by Auguste Rodin
 
-    Here is an example:
-    Q: The Thinker
-    A: The Thinker (1904) by Auguste Rodin
+        Q: """ + work_name + """
+        A:
+    """
 
-    Sculpture: {work_name}
+def getTheatreTemplate(work_name):
+    return """
+        You will receive information about a a play or a musical.
+        Your goal is to:
+        - Find the play/musical name
+        - Find the writer(s)
+        - Find the year in which it first premiered
 
-    YOUR RESPONSE:
-"""
+        Here are three examples:
+        Q: Death of a Salesman
+        A: Death of a Salesman (1949) by Arthur Miller
+        Q: A Streetcar Named Desire
+        A: A Streetcar Named Desire (1947) by Tennessee Williams
+        Q: The Importance of Being Earnest
+        A: The Importance of Being Earnest (1895) by Oscar Wilde
 
-theatre_template = """
-    You will receive information about a a play or a musical.
-    Your goal is to:
-    - Find the play/musical name
-    - Find the writer(s)
-    - Find the year in which it first premiered
+        Q: """ + work_name + """
+        A:
+    """
 
-    Here are three examples:
-    Q: Death of a Salesman
-    A: Death of a Salesman (1949) by Arthur Miller
-    Q: A Streetcar Named Desire
-    A: A Streetcar Named Desire (1947) by Tennessee Williams
-    Q: The Importance of Being Earnest
-    A: The Importance of Being Earnest (1895) by Oscar Wilde
+def getWorkRatingTemplate(work_title):
+    return """
+        What is the iMDB rating of """ + work_title+ """? Please provide only the rating in the format: 'rating/10'. If the rating does not exist or cannot be found, answer with 'N/A'
+    """
 
-    Play/Musical: {work_name}
-
-    YOUR RESPONSE:
-"""
-
-work_rating_template = """
-    What is the iMDB rating of {work_title}? Please provide only the rating in the format: 'rating/10'. If the rating does not exist or cannot be found, answer with 'N/A'
-"""
-
-work_introduction_template = """
-    Introduce {work_title} in one paragraph
-"""
+def getWorkIntroductionTemplate(work_title):
+    return """
+        Introduce """ + work_title + """ in one paragraph
+    """
 
 shared_opinion_template = """
 What are some opinions shared by {philosopher_list}?
