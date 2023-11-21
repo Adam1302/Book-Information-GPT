@@ -1,11 +1,5 @@
-import os
 import streamlit as sl
 from streamlit_extras.app_logo import add_logo
-from apikey import apikey # stored locally, not on Git
-from langchain.prompts import PromptTemplate
-from langchain.chains import LLMChain, SequentialChain
-from langchain.llms import OpenAI
-from langchain.memory import ConversationBufferMemory
 from utils.strings import site_description, site_technology_description
 
 sl.set_page_config(page_title="About", page_icon=":book:")

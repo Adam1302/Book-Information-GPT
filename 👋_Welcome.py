@@ -8,54 +8,26 @@ from streamlit_extras.app_logo import add_logo
 os.environ['OPENAI_API_KEY'] = apikey
 
 # ART MEDIA LITERATURE: IDEAS
-## AS PER: https://www.youtube.com/watch?v=U_eV8wfMkXU
-#   we will have a nice multi-columned explanation of what this site does
-
-# Add Page:
-### Give a checkbox/multiselect list of philosophers
-### For all philosophers clicked, get some opinions shared by them
-### ex. What are some opinions shared by Plato, Nietzsche, and Arendt?
-
-# Add Page: Prevailing opinions and timeframes
-### Use a slider for timeframe and a textbox for topic
-### ex. What was the prevailing opinion in the 1810s about multi-culturalism?
-### optional: location
-
-# Add Page: Poem Generator about [TOPIC] in style of [...]
-
-# Identifier Defect: "Introduce ..."
-
-# Everything here: https://docs.streamlit.io/library/api-reference/status 
 
 # Multi-threading: https://github.com/openai/openai-python
 
-# Page Idea: Give X different opinions on "topic/description" from philosophers
-
 # Add expanders on the About page to descibe the page functionalities
-
-# Use sl.status to show status: https://docs.streamlit.io/library/api-reference/status/st.status
-### Use this for loading responses
 
 # After finishing the rest of these, look at wtf this means: https://docs.streamlit.io/library/api-reference/session-state 
 
 ### Feedback page: actual implementation
 
 # Once all features are in, fix the layout: https://docs.streamlit.io/library/get-started/main-concepts#layout
-### search up how to make streamlit look nice
-### Use header, subheader, markdown, write, etc.
-### Have the input columns in a nice sidebar: https://docs.streamlit.io/library/get-started/multipage-apps/create-a-multipage-app
 
-# Use WIkipedia API to link names to their pages
-
-# Re-organize everything into different files, proper style/organization
+# Refactoring
 
 # Deploy:
 ### https://docs.streamlit.io/library/get-started/create-an-app#share-your-app
 
+# OpenAI Pricing
+
 # Advertise
 ### Create reddit account and share
-
-# Geospatial image of where artists, authors, lived/were born https://docs.streamlit.io/library/get-started/multipage-apps/create-a-multipage-app
 
 ## STREAMLIT PAGE
 sl.set_page_config(page_title="Art_Finder", page_icon=":book:")
