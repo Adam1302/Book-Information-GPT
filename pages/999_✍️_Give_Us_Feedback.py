@@ -1,3 +1,4 @@
+from email_info import receivingEmail, receivingEmailKey # Ignored in Git
 import re
 import streamlit as sl
 from streamlit_extras.app_logo import add_logo
@@ -11,36 +12,23 @@ sl.markdown("Please note that this site is not for-profit and is personally fund
 
 sl.markdown("If you would like a response, please provide your email.")
 
-def get_email():
-    email = sl.text_input(
-        label="Email (optional): ",
-        placeholder="Enter email here",
-        key="email_input"
-    )
-    return email
-def get_feedback():
-    feedback = sl.text_area(
-        label="Feedback: ",
-        placeholder="Enter feedback here",
-        key="feedback_input"
-    )
-    return feedback
+contact_form = f"""
+<form action="https://formsubmit.co/{receivingEmailKey}" method="POST">
+    <input type="email" name="email" placeholder="Your email (optional)">
+    <textarea name="message" placeholder="Your message here"></textarea>
+    <button type="submit">Send</button>
+    <input type="text" name="_honey" style="display:none">
+    <input type="hidden" name="_template" value="table">
+</form>
+"""
 
-def check_email_validity(email):
-    return email=="" or email.isspace() or re.fullmatch(email_regex, email)
+sl.markdown(contact_form, unsafe_allow_html=True)
+
+# Use Local CSS File
+def local_css(file_name):
+    with open(file_name) as f:
+        sl.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
 
-email_val = get_email()
-feedback_val = get_feedback()
-
-# Every form must have a submit button.
-if sl.button("Submit"):
-    if not check_email_validity(email_val):
-        sl.error(":red[ERROR: Invalid email provided. Either enter a valid email or none at all.]", icon="🚨")
-        submitted = False
-    elif feedback_val=="" or feedback_val.isspace():
-        sl.error(":red[ERROR: You haven't provided any feedback]", icon="🚨")
-        submitted = False
-    else:
-        sl.write(":green[... Feedback submitted (but not implemented)]")
+local_css("style/style.css")
 
