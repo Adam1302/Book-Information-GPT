@@ -13,9 +13,7 @@ os.environ['OPENAI_API_KEY'] = apikey
 
 # Add expanders on the About page to descibe the page functionalities
 
-# After finishing the rest of these, look at wtf this means: https://docs.streamlit.io/library/api-reference/session-state 
-
-### Feedback page: actual implementation
+# After finishing the rest of these, look at wtf this means: https://docs.streamlit.io/library/api-reference/session-state
 
 # Once all features are in, fix the layout: https://docs.streamlit.io/library/get-started/main-concepts#layout
 
@@ -25,6 +23,10 @@ os.environ['OPENAI_API_KEY'] = apikey
 ### https://docs.streamlit.io/library/get-started/create-an-app#share-your-app
 
 # OpenAI Pricing
+
+# After deploying, change the form submit landing page after submission:
+### https://formsubmit.co/documentation
+# Then, create an use an official site email (ex. "AMLTeam@outlook.com")
 
 # Advertise
 ### Create reddit account and share
