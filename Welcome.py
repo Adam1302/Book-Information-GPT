@@ -2,10 +2,10 @@ from apikey import apikey # stored locally, not on Git
 import os
 import streamlit as sl
 from streamlit_extras.app_logo import add_logo
-
-
+from st_pages import show_pages_from_config, add_indentation
 
 os.environ['OPENAI_API_KEY'] = apikey
+
 
 # ART MEDIA LITERATURE: IDEAS
 
@@ -34,6 +34,9 @@ os.environ['OPENAI_API_KEY'] = apikey
 ## STREAMLIT PAGE
 sl.set_page_config(page_title="Art_Finder", page_icon=":book:")
 add_logo("pictures/essentials/logo_x_small.png")
+
+add_indentation()
+show_pages_from_config()
 
 @sl.cache_resource
 def getPageImage():

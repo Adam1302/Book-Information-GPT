@@ -1,9 +1,12 @@
 import streamlit as sl
 from streamlit_extras.app_logo import add_logo
+from st_pages import add_indentation
 from utils.strings import site_description, site_technology_description
 
 sl.set_page_config(page_title="About", page_icon=":book:")
 add_logo("pictures/essentials/logo_x_small.png")
+
+add_indentation()
 
 @sl.cache_resource
 def getPageImage():

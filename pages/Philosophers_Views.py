@@ -1,10 +1,13 @@
 import streamlit as sl
 from streamlit_extras.app_logo import add_logo
+from st_pages import add_indentation
 from utils.llm import getOpenAIClient
 from utils.philosopher_list import shortened_philosopher_list, extensive_philosopher_list
 
 sl.set_page_config(page_title="Philosopher Views", page_icon=":book:")
 add_logo("pictures/essentials/logo_x_small.png")
+
+add_indentation()
 
 client = getOpenAIClient()
 

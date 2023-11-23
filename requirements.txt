@@ -1,5 +1,7 @@
+langchain
+openai
+pytest
 streamlit
 streamlit-extras
-openai
-langchain
+st-pages
 tiktoken
