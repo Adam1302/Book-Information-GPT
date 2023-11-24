@@ -2,53 +2,13 @@ import streamlit as sl
 from streamlit_extras.app_logo import add_logo
 from st_pages import add_indentation
 from utils.llm import getOpenAIClient
-from utils.templates import getBookTemplate, getDocumentaryTemplate, getWorkIntroductionTemplate, getMovieTemplate, getPaintingTemplate, getPoemTemplate, getSculptureTemplate, getTheatreTemplate, getTvShowTemplate, getWorkRatingTemplate
-
-def getTemplate(artType, work_name):
-    if (artType == "Book"):
-        return getBookTemplate(work_name)
-    elif (artType == "Poem"):
-        return getPoemTemplate(work_name)
-    elif (artType == "Movie"):
-        return getMovieTemplate(work_name)
-    elif (artType == "TV Show"):
-        return getTvShowTemplate(work_name)
-    elif (artType == "Documentary"):
-        return getDocumentaryTemplate(work_name)
-    elif (artType == "Painting"):
-        return getPaintingTemplate(work_name)
-    elif (artType == "Sculpture"):
-        return getSculptureTemplate(work_name)
-    elif (artType == "Play/Musical"):
-        return getTheatreTemplate(work_name)
-
-def getWorkTitle(infoOutput, work_type):
-    if (work_type == "Book" or work_type == "Poem" or work_type == "Painting" or work_type == "Sculpture" or work_type == "Play/Musical"):
-        return infoOutput
-    elif work_type == "Movie":
-        try:
-            title = infoOutput[0:infoOutput.index("Directed by")]
-        except:
-            title = ""
-        return title
-    elif work_type == "TV Show":
-        try:
-            title = infoOutput[0:infoOutput.index('[')]
-        except:
-            title = ""
-        return title
-    elif work_type == "Documentary":
-        try:
-            title = infoOutput[0:(infoOutput.index(')') + 1)]
-        except:
-            title = ""
-        return title
+from utils.page_helpers.AML_Identifier_Helpers import getWorkTitle
+from utils.templates import getTemplate, getWorkIntroductionTemplate, getWorkRatingTemplate
 
 sl.set_page_config(page_title="Work_Identifier", page_icon=":book:")
 add_logo("pictures/essentials/logo_x_small.png")
 
 add_indentation()
-
 
 client = getOpenAIClient()
 
@@ -103,7 +63,7 @@ if sl.button("Identify"):
                 ).choices[0].message.content
             sl.write(work_rating)
         
-        with sl.spinner("Retrieving mroe information"):
+        with sl.spinner("Retrieving more information"):
             sl.markdown("### About:")
             work_intro = client.chat.completions.create(
                 model="gpt-3.5-turbo",
@@ -115,6 +75,8 @@ if sl.button("Identify"):
                 ],
                 stream=True
             )
+
+        # Streamed Output
         placeholder = sl.empty()
         full_response = ''
         for item in work_intro:

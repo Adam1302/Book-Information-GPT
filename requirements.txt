@@ -1,6 +1,5 @@
 langchain
 openai
-pytest
 streamlit
 streamlit-extras
 st-pages

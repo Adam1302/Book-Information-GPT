@@ -9,13 +9,9 @@ os.environ['OPENAI_API_KEY'] = apikey
 
 # ART MEDIA LITERATURE: IDEAS
 
-# Multi-threading: https://github.com/openai/openai-python
-
 # Add expanders on the About page to descibe the page functionalities
 
 # After finishing the rest of these, look at wtf this means: https://docs.streamlit.io/library/api-reference/session-state
-
-# Once all features are in, fix the layout: https://docs.streamlit.io/library/get-started/main-concepts#layout
 
 # Refactoring
 

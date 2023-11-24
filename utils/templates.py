@@ -24,7 +24,7 @@ def getWorkSuggestionTemplate(work_type, topic):
     Botticelli's iconic painting of Venus emerging from the sea symbolizes the idealized and mythological aspects of love, inviting contemplation on the illusionary nature of beauty and desire.
 
     TOPIC: """ + topic + """
-"""
+    """
 
 def getBookTemplate(work_name):
     return """
@@ -151,7 +151,6 @@ def getPaintingTemplate(work_name):
         A:
     """
 
-
 def getSculptureTemplate(work_name):
     return """
         You will receive information about a sculpture.
@@ -197,6 +196,24 @@ def getWorkIntroductionTemplate(work_title):
     return """
         Introduce """ + work_title + """ in one paragraph
     """
+
+def getTemplate(artType, work_name):
+    if (artType == "Book"):
+        return getBookTemplate(work_name)
+    elif (artType == "Poem"):
+        return getPoemTemplate(work_name)
+    elif (artType == "Movie"):
+        return getMovieTemplate(work_name)
+    elif (artType == "TV Show"):
+        return getTvShowTemplate(work_name)
+    elif (artType == "Documentary"):
+        return getDocumentaryTemplate(work_name)
+    elif (artType == "Painting"):
+        return getPaintingTemplate(work_name)
+    elif (artType == "Sculpture"):
+        return getSculptureTemplate(work_name)
+    elif (artType == "Play/Musical"):
+        return getTheatreTemplate(work_name)
 
 shared_opinion_template = """
 What are some opinions shared by {philosopher_list}?
