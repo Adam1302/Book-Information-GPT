@@ -1,0 +1,51 @@
+[[pages]]
+path = "Welcome.py"
+name = "Welcome"
+icon = "👋"
+
+[[pages]]
+path = "pages/About.py"
+name = "About"
+icon = "ℹ️"
+
+[[pages]]
+name = "AML"
+icon = ""
+is_section = true
+
+[[pages]]
+path = "pages/AML_Suggestor.py"
+name = "AML Suggestor"
+icon = "🔮"
+
+[[pages]]
+path = "pages/AML_Identifier.py"
+name = "AML Identifier"
+icon = "🔍"
+
+[[pages]]
+name = "Perspectives"
+icon = ""
+in_section = false
+is_section = true
+
+[[pages]]
+path = "pages/Points_Of_View.py"
+name = "Points of View"
+icon = "👁️‍🗨️"
+
+[[pages]]
+path = "pages/Relative_Opinions.py"
+name = "Relative Opinions"
+icon = "🤝"
+
+[[pages]]
+path = "pages/Philosophers_Views.py"
+name = "Philosophers Views"
+icon = "🔭"
+
+[[pages]]
+path = "pages/Give_Us_Feedback.py"
+name = "Give Us Feedback"
+icon = "✍️"
+in_section = false
