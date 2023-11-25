@@ -1,4 +1,3 @@
-# from email_info import receivingEmail, receivingEmailKey # Ignored in Git
 import os
 import re
 import streamlit as sl
