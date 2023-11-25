@@ -16,7 +16,7 @@ sl.markdown("Please note that this site is not for-profit and is personally fund
 sl.markdown("If you would like a response, please provide your email.")
 
 contact_form = f"""
-<form action="https://formsubmit.co/{receivingEmailKey}" method="POST">
+<form action="https://formsubmit.co/{os.environ['receivingEmailKey']}" method="POST">
     <input type="email" name="email" placeholder="Your email (optional)">
     <textarea name="message" placeholder="Your message here"></textarea>
     <button type="submit">Send</button>
