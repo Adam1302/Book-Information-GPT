@@ -29,8 +29,8 @@ from st_pages import show_pages_from_config, add_indentation
 sl.set_page_config(page_title="Art_Finder", page_icon=":book:")
 add_logo("pictures/essentials/logo_x_small.png")
 
-add_indentation()
 show_pages_from_config()
+add_indentation()
 
 @sl.cache_resource
 def getPageImage():
@@ -39,8 +39,6 @@ def getPageImage():
 titleCol, imageCol = sl.columns({1,1.5}, gap='large')
 with titleCol:
     sl.title("Art, Media, and Literature (AML): A Navigator")
-    sl.divider()
-    sl.subheader("A Work Suggestor and Identifier")
     sl.divider()
     sl.write("Click the 'About' tab to learn more")
 with imageCol:
