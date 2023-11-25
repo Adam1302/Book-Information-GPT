@@ -1,11 +1,8 @@
-#from apikey import apikey # to run locally, not on Git
-import os
 import streamlit as sl
 from streamlit_extras.app_logo import add_logo
 from st_pages import show_pages_from_config, add_indentation
 
-#os.environ['OPENAI_API_KEY'] = apikey
-
+# import local_setup # comment out when working locally
 
 # ART MEDIA LITERATURE: IDEAS
 
@@ -13,8 +10,9 @@ from st_pages import show_pages_from_config, add_indentation
 ### Add Session State for everything
 ### I want to save widget selections and text entries
 
-# Deploy:
-### https://docs.streamlit.io/library/get-started/create-an-app#share-your-app
+# Widgets: change those two-option sliders to radio buttons
+
+# About Page and Welcome Page: change description
 
 # OpenAI Pricing
 
