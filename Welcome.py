@@ -1,19 +1,17 @@
-from apikey import apikey # stored locally, not on Git
+#from apikey import apikey # to run locally, not on Git
 import os
 import streamlit as sl
 from streamlit_extras.app_logo import add_logo
 from st_pages import show_pages_from_config, add_indentation
 
-os.environ['OPENAI_API_KEY'] = apikey
+#os.environ['OPENAI_API_KEY'] = apikey
 
 
 # ART MEDIA LITERATURE: IDEAS
 
-# Add expanders on the About page to descibe the page functionalities
-
-# After finishing the rest of these, look at wtf this means: https://docs.streamlit.io/library/api-reference/session-state
-
-# Refactoring
+# Whenever you're developing, consider using session state: https://docs.streamlit.io/library/api-reference/session-state
+### Add Session State for everything
+### I want to save widget selections and text entries
 
 # Deploy:
 ### https://docs.streamlit.io/library/get-started/create-an-app#share-your-app
@@ -26,6 +24,8 @@ os.environ['OPENAI_API_KEY'] = apikey
 
 # Advertise
 ### Create reddit account and share
+
+# Also look into this: https://docs.github.com/en/pages
 
 ## STREAMLIT PAGE
 sl.set_page_config(page_title="Art_Finder", page_icon=":book:")
