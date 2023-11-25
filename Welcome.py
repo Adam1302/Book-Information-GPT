@@ -1,12 +1,8 @@
-#from apikey import apikey # to run locally, not on Git
-#from email_info import receivingEmail, receivingEmailKey # Ignored in Git
-import os
 import streamlit as sl
 from streamlit_extras.app_logo import add_logo
 from st_pages import show_pages_from_config, add_indentation
 
-#os.environ['OPENAI_API_KEY'] = apikey
-#os.environ['receivingEmailKey'] = receivingEmailKey
+import local_setup # comment out when working locally
 
 # ART MEDIA LITERATURE: IDEAS
 
