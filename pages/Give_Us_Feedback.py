@@ -1,4 +1,5 @@
 # from email_info import receivingEmail, receivingEmailKey # Ignored in Git
+import os
 import re
 import streamlit as sl
 from streamlit_extras.app_logo import add_logo
