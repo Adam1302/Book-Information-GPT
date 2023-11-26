@@ -3,8 +3,21 @@ from streamlit_extras.app_logo import add_logo
 from st_pages import add_indentation
 from utils.strings import site_description, site_technology_description
 
-sl.set_page_config(page_title="About", page_icon=":book:")
+sl.set_page_config(page_title="About AML", page_icon=":book:")
 add_logo("pictures/essentials/logo_x_small.png")
+
+st.markdown(
+    """
+    <style>
+    .css-1jc7ptx, .e1ewe7hr3, .viewerBadge_container__1QSob,
+    .styles_viewerBadge__1yB5_, .viewerBadge_link__1S137,
+    .viewerBadge_text__1JaDK {
+        display: none;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
 add_indentation()
 

@@ -12,6 +12,8 @@ from st_pages import show_pages_from_config, add_indentation
 
 # OpenAI Pricing
 
+# If things go well, look into OpenAI's $20/month plan that allows you to create you own GPT based off of uploaded files (plato.stanford.edu files)
+
 # After deploying, change the form submit landing page after submission:
 ### https://formsubmit.co/documentation
 # Then, create an use an official site email (ex. "AMLTeam@outlook.com")
@@ -22,7 +24,7 @@ from st_pages import show_pages_from_config, add_indentation
 # Also look into this: https://docs.github.com/en/pages
 
 ## STREAMLIT PAGE
-sl.set_page_config(page_title="Art_Finder", page_icon=":book:")
+sl.set_page_config(page_title="AML HOME", page_icon=":book:")
 add_logo("pictures/essentials/logo_x_small.png")
 
 show_pages_from_config()
