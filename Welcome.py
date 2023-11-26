@@ -10,10 +10,6 @@ from st_pages import show_pages_from_config, add_indentation
 ### Add Session State for everything
 ### I want to save widget selections and text entries
 
-# Widgets: change those two-option sliders to radio buttons
-
-# About Page and Welcome Page: change description
-
 # OpenAI Pricing
 
 # After deploying, change the form submit landing page after submission:
