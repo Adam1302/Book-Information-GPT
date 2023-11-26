@@ -14,32 +14,31 @@ client = getOpenAIClient()
 
 sl.header("Philosophers: Relative Opinions")
 
-relationTypeCol, philosopherListCol = sl.columns((1,1), gap='large')
+philosopherListCol, relationTypeCol = sl.columns((1,1), gap='large')
 with relationTypeCol:
     relation_type = sl.select_slider(
         'Opinion Relations:',
-        options=['Agreements', 'Disagreements']
+        options=['Agreements', 'Disagreements'],
     )
 with philosopherListCol:
-    philosopher_list_type = sl.select_slider(
-        label="Philosopher List:",
-        options=['Reduced', 'Extensive']
+    reduced_philosopher_list = sl.toggle(
+        "Reduced Philosopher List:",
     )
 
-if philosopher_list_type == 'Reduced':
-    philosopher_list = shortened_philosopher_list
-else:
-    philosopher_list = extensive_philosopher_list
+    if reduced_philosopher_list:
+        philosopher_list = shortened_philosopher_list
+    else:
+        philosopher_list = extensive_philosopher_list
 
-def get_philosophers():
-    philsophers = sl.multiselect(
-        f"Select philosophers (max. 4):",
-        philosopher_list,
-        max_selections=4,
-    )
-    return philsophers
+    def get_philosophers():
+        philsophers = sl.multiselect(
+            f"Select philosophers (max. 4):",
+            philosopher_list,
+            max_selections=4,
+        )
+        return philsophers
 
-philosophers_input = get_philosophers()
+    philosophers_input = get_philosophers()
 
 if sl.button(f"Get {relation_type}") and philosophers_input:
 

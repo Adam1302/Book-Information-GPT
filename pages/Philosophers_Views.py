@@ -16,12 +16,11 @@ with pictureCol:
     sl.image("pictures/other/growing_tree.jpg")
 with philosopherCol:
     sl.header("Philosopher Views")
-    philosopher_list_type = sl.select_slider(
-        label="Philosopher List:",
-        options=['Reduced', 'Extensive']
+    reduced_philosopher_list = sl.toggle(
+        "Reduced Philosopher List:",
     )
 
-    if philosopher_list_type == 'Reduced':
+    if reduced_philosopher_list:
         philosopher_list = shortened_philosopher_list
     else:
         philosopher_list = extensive_philosopher_list
