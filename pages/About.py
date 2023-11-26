@@ -6,7 +6,7 @@ from utils.strings import site_description, site_technology_description
 sl.set_page_config(page_title="About AML", page_icon=":book:")
 add_logo("pictures/essentials/logo_x_small.png")
 
-st.markdown(
+sl.markdown(
     """
     <style>
     .css-1jc7ptx, .e1ewe7hr3, .viewerBadge_container__1QSob,
