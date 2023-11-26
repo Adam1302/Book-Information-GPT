@@ -24,7 +24,7 @@ sl.header("Work Suggestions")
 
 work_type = sl.selectbox(
         'What type of work would you like suggested?',
-        ('Novel/Novella', 'Short Story', 'Book', 'Movie', 'TV Show', 'Documentary',
+        ('Novel/Novella', 'Short Story', 'Non-Fiction Book', 'Movie', 'TV Show', 'Documentary',
         'Poem', 'Painting', 'Sculpture', 'Play/Musical'))
 
 topic_input = get_work_desire()
