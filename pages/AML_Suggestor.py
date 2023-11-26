@@ -5,7 +5,7 @@ from utils.llm import getOpenAIClient
 from utils.templates import getWorkSuggestionTemplate
 
 
-sl.set_page_config(page_title="Work_Suggestions", page_icon=":book:")
+sl.set_page_config(page_title="AML: Work Suggestor", page_icon=":book:")
 add_logo("pictures/essentials/logo_x_small.png")
 
 add_indentation()

@@ -5,7 +5,7 @@ from utils.llm import getOpenAIClient
 from utils.page_helpers.AML_Identifier_Helpers import getWorkTitle
 from utils.templates import getTemplate, getWorkIntroductionTemplate, getWorkRatingTemplate
 
-sl.set_page_config(page_title="Work_Identifier", page_icon=":book:")
+sl.set_page_config(page_title="AML: Work Identifier", page_icon=":book:")
 add_logo("pictures/essentials/logo_x_small.png")
 
 add_indentation()

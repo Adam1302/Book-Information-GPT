@@ -5,7 +5,7 @@ from streamlit_extras.app_logo import add_logo
 from st_pages import add_indentation
 from utils.email import email_regex
 
-sl.set_page_config(page_title="Feedback", page_icon=":book:")
+sl.set_page_config(page_title="AML: Feedback", page_icon=":book:")
 add_logo("pictures/essentials/logo_x_small.png")
 
 add_indentation()
