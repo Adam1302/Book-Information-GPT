@@ -4,3 +4,4 @@ streamlit
 streamlit-extras
 st-pages
 tiktoken
+validators
